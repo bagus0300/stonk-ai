@@ -10,6 +10,8 @@ class TickerModel(Model):
     open_price = FloatField(null=True)
     close_price = FloatField(null=True)
 
+    class Meta:
+        table = "ticker_model"
 
 
     

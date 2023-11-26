@@ -11,19 +11,25 @@ class SentimentEnum(str, Enum):
 
 class ArticleModel(Model):
     id = IntField(pk=True)
+    article_id = IntField()
     title = TextField()
     image_url = TextField(null=True)
     article_url = TextField()
     summary = TextField()
     publication_datetime = CharField(max_length=100)
-    ticker = ForeignKeyField ('models.TickerModel') 
-    sentiment = CharEnumField(SentimentEnum, max_length=10, null=True)  
+    ticker = ForeignKeyField('models.TickerModel') 
+    sentiment = CharEnumField(SentimentEnum, max_length=10)  
+
+    class Meta:
+        table = "article_model"
 
     @classmethod
     async def get_paged_articles(cls, page):
         page_size = 10
         offset = (page - 1) * page_size
         return await cls.all().offset(offset).limit(page_size).all()
+    
+    
     
     
     

@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 from tortoise import Tortoise
+from tortoise.exceptions import IntegrityError
 
 load_dotenv()
 
@@ -29,10 +30,7 @@ DB_CONFIG = {
 }
 
 async def init_db():
-    await Tortoise.init(
-        config=DB_CONFIG
-    )
-    print("done")
-    await Tortoise.generate_schemas()
+    await Tortoise.init(config=DB_CONFIG)
+    # await Tortoise.generate_schemas()
 
 

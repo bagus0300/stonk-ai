@@ -6,10 +6,10 @@ import os
 
 load_dotenv()
 
-class StockAPI:
+class StockUtils:
 
-    @classmethod
-    def get_eod_data(cls, ticker, date_str):
+    @staticmethod
+    def get_eod_data(ticker, date_str):
         try:
             base_url = "http://api.marketstack.com/v1/eod"
             url = f"{base_url}/{date_str}"
@@ -24,14 +24,14 @@ class StockAPI:
         except Exception:
             return None
         
-    @classmethod
-    def get_market_date(cls, article_datetime):
+    @staticmethod
+    def get_market_date(article_datetime):
         published_date = article_datetime.date()
 
-        if published_date.weekday() >= 5 or (published_date.weekday() == 4 and StockAPI.after_market_closed(article_datetime)):
-            return StockAPI.get_next_monday(published_date) 
+        if published_date.weekday() >= 5 or (published_date.weekday() == 4 and StockUtils.after_market_closed(article_datetime)):
+            return StockUtils.get_next_monday(published_date) 
             
-        elif cls.after_market_closed(article_datetime):
+        elif StockUtils.after_market_closed(article_datetime):
             return published_date + timedelta(days=1) 
         
         return published_date
@@ -41,8 +41,8 @@ class StockAPI:
         et_market_close = time(16, 0)
         et_day_end = time(23, 59) 
 
-        utc_market_close = StockAPI.convert_ET_to_UTC(article_datetime.date(), et_market_close)
-        utc_day_end = StockAPI.convert_ET_to_UTC(article_datetime.date(), et_day_end)
+        utc_market_close = StockUtils.convert_ET_to_UTC(article_datetime.date(), et_market_close)
+        utc_day_end = StockUtils.convert_ET_to_UTC(article_datetime.date(), et_day_end)
         utc_article_datetime = article_datetime.replace(tzinfo=pytz.utc)
 
         if utc_market_close < utc_article_datetime and utc_article_datetime <= utc_day_end:
@@ -63,9 +63,9 @@ class StockAPI:
         next_monday = date + timedelta(days=days_until_monday)
         return next_monday
 
-    @classmethod
-    def get_open_close(cls, ticker, date):
-        eod_data = StockAPI.get_eod_data(ticker, date) 
+    @staticmethod
+    def get_open_close(ticker, date):
+        eod_data = StockUtils.get_eod_data(ticker, date) 
         open_price, close_price = None, None
         
         if eod_data is not None and "data" in eod_data and len(eod_data["data"]) > 0:
