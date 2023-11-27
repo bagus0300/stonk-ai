@@ -3,10 +3,17 @@ from .services.ArticleService import process_articles
 from .services.TickerService import update_tickers
 from .views.ArticleView import ArticleView
 from .models.ResponseModel import ResponseModel
+from fastapi.middleware.cors import CORSMiddleware
 from .db import init_db
 from fastapi import FastAPI
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="http://localhost:3000", 
+    allow_credentials=True
+)
 
 @app.on_event("startup")
 async def startup():
