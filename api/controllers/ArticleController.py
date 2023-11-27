@@ -1,6 +1,6 @@
-from models.ArticleModel import ArticleModel, SentimentEnum
-from controllers.TickerController import TickerController
-from utils.article import ArticleUtils
+from ..models.ArticleModel import ArticleModel, SentimentEnum
+from ..controllers.TickerController import TickerController
+from ..utils.article import ArticleUtils
 import logging
 import traceback
 
@@ -10,7 +10,6 @@ class ArticleController:
 
     @classmethod
     async def create_article(cls, article):
-        print("Creating article" )
         existing_article = await ArticleModel.filter(article_id=article['id'])
 
         if existing_article:
@@ -31,7 +30,6 @@ class ArticleController:
                 publication_datetime=article_data['publication_datetime'],
                 sentiment=SentimentEnum[article_data['sentiment'].upper()]
             )
-            print(new_article.title)
             await new_article.save()
 
         except Exception as e:

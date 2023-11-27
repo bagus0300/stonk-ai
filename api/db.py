@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 import os
 from tortoise import Tortoise
-from tortoise.exceptions import IntegrityError
 
 load_dotenv()
 
@@ -23,7 +22,7 @@ DB_CONFIG = {
     },
     "apps": {
         "models": {
-            "models": ["models.ArticleModel", "models.TickerModel"],
+            "models": ["api.models.ArticleModel", "api.models.TickerModel"],
             "default_connection": "default",
         }
     }

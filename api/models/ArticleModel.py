@@ -10,7 +10,7 @@ class SentimentEnum(str, Enum):
     NEUTRAL = 'Neutral'
 
 class ArticleModel(Model):
-    id = IntField(pk=True)
+    id = IntField(pk=True, generated=True)
     article_id = IntField()
     title = TextField()
     image_url = TextField(null=True)

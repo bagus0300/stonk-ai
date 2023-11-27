@@ -1,5 +1,5 @@
-from controllers.ArticleController import ArticleController
-from models.ResponseModel import ResponseModel
+from ..controllers.ArticleController import ArticleController
+from ..models.ResponseModel import ResponseModel
 
 class ArticleView:
 

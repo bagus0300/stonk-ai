@@ -1,5 +1,5 @@
-from utils.article import ArticleUtils
-from controllers.ArticleController import ArticleController
+from ..utils.article import ArticleUtils
+from ..controllers.ArticleController import ArticleController
 import datetime
 
 async def process_articles():   

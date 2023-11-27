@@ -1,4 +1,4 @@
-from controllers.TickerController import TickerController
+from ..controllers.TickerController import TickerController
 import datetime
 
 async def update_tickers():
