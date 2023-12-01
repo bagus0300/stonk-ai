@@ -1,7 +1,12 @@
-import NewsDisplay from '@/components/NewsDisplay'
+import NewsDisplay from "@/components/NewsDisplay";
 
 export default function Home() {
   return (
-    <NewsDisplay />
+    <>
+      <div className="main">
+        <div className="gradient" />
+      </div>
+      <NewsDisplay />
+    </>
   );
 }

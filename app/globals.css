@@ -2,3 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  padding: 180px 24px 180px 24px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+
+.gradient {
+  height: fit-content;
+  width: 100%;
+  height: 80%;
+  max-width: 900px;
+  background-image: radial-gradient(
+      at 27% 37%,
+      hsla(215, 98%, 61%, 1) 0px,
+      transparent 0%
+    ),
+    radial-gradient(at 97% 21%, rgb(53, 226, 68) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, rgb(64, 0, 241) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, rgb(252, 179, 54) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, rgb(255, 19, 86) 0px, transparent 50%);
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  filter: blur(100px) saturate(150%);
+  top: 80px;
+  opacity: 0.15;
+}
+
+

@@ -31,8 +31,8 @@ async def initialize_db():
 
 def schedule_background_tasks():
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(process_articles_job, 'cron', hour=17, minute=17)
-    scheduler.add_job(update_tickers_job, 'cron', hour=14, minute=28)
+    scheduler.add_job(process_articles_job, 'cron', hour=23, minute=18)
+    scheduler.add_job(update_tickers_job, 'cron', hour=20, minute=56)
     scheduler.start()
 
 async def process_articles_job():

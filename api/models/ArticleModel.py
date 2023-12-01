@@ -27,7 +27,7 @@ class ArticleModel(Model):
     async def get_paged_articles(cls, page):
         page_size = 10
         offset = (page - 1) * page_size
-        return await cls.all().offset(offset).limit(page_size).all()
+        return await cls.all().order_by('-publication_datetime').offset(offset).limit(page_size).all()
     
     
     
