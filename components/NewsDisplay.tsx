@@ -11,7 +11,7 @@ const NewsDisplay = () => {
 
   const loadArticles = async () => {
     try {
-        const response = await fetch(`http://localhost:8000/articles/${page}`)
+        const response = await fetch(`/api/articles/${page}`)
       const data = await response.json();
       setArticles((prevArticles) => [...prevArticles, ...data.articles]);
       setLoading(false);
@@ -28,7 +28,6 @@ const NewsDisplay = () => {
   // Handles initial loading
   useEffect(() => {
     loadArticles();
-    console.log("added");
   }, []);
 
   // Handles lazy loading
