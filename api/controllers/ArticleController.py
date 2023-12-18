@@ -46,7 +46,7 @@ class ArticleController:
             return "Successfully Queried Articles", articles_list, 200
 
         except Exception:
-            return "Internal Service Error", None, 500
+            return "Internal Service Error", [], 500
     
     @staticmethod
     async def convert_articles_to_json(articles_list):
