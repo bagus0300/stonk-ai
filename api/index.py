@@ -10,15 +10,12 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup():
-    await initialize_db()
-    schedule_background_tasks()
+    await init_db()
+    # schedule_background_tasks()
 
 @app.get('/api/articles/{page}', response_model=ResponseModel)
 async def get_article(page: int):
     return await ArticleView.get_articles(page)
-
-async def initialize_db():
-    await init_db()
 
 def schedule_background_tasks():
     scheduler = AsyncIOScheduler()
