@@ -3,7 +3,6 @@ from .services.ArticleService import process_articles
 from .services.TickerService import update_tickers
 from .views.ArticleView import ArticleView
 from .models.ResponseModel import ResponseModel
-from fastapi.middleware.cors import CORSMiddleware
 from .db import init_db
 from fastapi import FastAPI
 
@@ -23,7 +22,7 @@ async def initialize_db():
 
 def schedule_background_tasks():
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(process_articles_job, 'cron', hour=23, minute=18)
+    scheduler.add_job(process_articles_job, 'cron', hour=23, minute=32)
     scheduler.add_job(update_tickers_job, 'cron', hour=20, minute=56)
     scheduler.start()
 
