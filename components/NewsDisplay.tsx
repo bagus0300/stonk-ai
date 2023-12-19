@@ -11,7 +11,10 @@ const NewsDisplay = () => {
 
   const loadArticles = async () => {
     try {
-        const response = await fetch(`/api/articles/${page}`)
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${page}`
+      );
+
       const data = await response.json();
       setArticles((prevArticles) => [...prevArticles, ...data.articles]);
       setLoading(false);
