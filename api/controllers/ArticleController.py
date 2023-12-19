@@ -45,8 +45,11 @@ class ArticleController:
             articles_list =  await ArticleController.convert_articles_to_json(await ArticleModel.get_paged_articles(page))
             return "Successfully Queried Articles", articles_list, 200
 
-        except Exception:
-            return "Internal Service Error", [], 500
+        except Exception as e:
+            error_message = f"Internal Service Error: {e}"
+            logging.error(error_message)
+            logging.error(traceback.format_exc())
+            return error_message, [], 500
     
     @staticmethod
     async def convert_articles_to_json(articles_list):
