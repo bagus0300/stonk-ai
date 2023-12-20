@@ -53,8 +53,8 @@ const NewsDisplay = () => {
   }, [page]);
 
   return (
-    <div className="max-w-screen-lg mx-auto ">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="max-w-screen-lg mx-auto mt-10 mb-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {articles.map((article, index) => (
           <Card
             key={index}
