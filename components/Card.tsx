@@ -74,7 +74,7 @@ const Card: React.FC<Article> = ({
               ? "▼"
               : ""}
             {getDifference(open_price, close_price)} (
-            {getPriceAction(open_price, close_price)})%
+            {getPriceAction(open_price, close_price)}%)
           </p>
         </div>
 

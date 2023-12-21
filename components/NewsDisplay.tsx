@@ -5,8 +5,6 @@ import Card from "@/components/Card";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMoreData, setHasMoreData] = useState(true);
   const [page, setPage] = useState(1);
 
   const loadArticles = async () => {
@@ -17,40 +15,15 @@ const NewsDisplay = () => {
 
       const data = await response.json();
       setArticles((prevArticles) => [...prevArticles, ...data.articles]);
-      setLoading(false);
       setPage((prevPage) => prevPage + 1);
-      if (data.articles.length === 0) {
-        setHasMoreData(false);
-      }
     } catch (error) {
       console.error("Error fetching data:", error);
-      setLoading(false);
     }
   };
 
-  // Handles initial loading
   useEffect(() => {
     loadArticles();
   }, []);
-
-  // Handles lazy loading
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        !loading &&
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200
-      ) {
-        console.log(page);
-        loadArticles();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [page]);
 
   return (
     <div className="max-w-screen-lg mx-auto mt-10 mb-20">
@@ -70,6 +43,14 @@ const NewsDisplay = () => {
             close_price={article.close_price}
           />
         ))}
+      </div>
+      <div className="flex justify-center mt-10">
+        <button
+          className={`border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transform hover:scale-105 font-semibold py-2 px-4 rounded mt-4 inline-block transition duration-300 ease-in-out cursor-pointer`}
+          onClick={loadArticles}
+        >
+          Load More
+        </button>
       </div>
     </div>
   );
