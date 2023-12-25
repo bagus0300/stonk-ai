@@ -34,12 +34,12 @@ const Card: React.FC<Article> = ({
         <img
           src={image_url}
           alt={title}
-          className="w-full h-48 object-cover mb-2"
+          className="w-full h-60 object-cover mb-3 rounded-lg"
         />
-        <p className="mb-2">{publication_datetime}</p>
+        <p className="italic mb-2">{publication_datetime}</p>
         <h2 className="text-xl font-bold mb-2">{title}</h2>
         <div className="flex flex-row space-x-4">
-          <p className="text-red-400 text-xl font-bold">{ticker}</p>
+          <p className="text-red-400 text-xl font-bold mb-2">{ticker}</p>
           <p
             className={`text-xl font-semibold ${
               sentiment === "Positive"
@@ -54,29 +54,32 @@ const Card: React.FC<Article> = ({
         </div>
         <p>{truncateSummary(summary, 300)}</p>
 
-        <h1 className="mt-4 text-lg">Price Action On: {market_date}</h1>
-
-        <div className="flex flex-row space-x-4">
-          <p>O: {open_price}</p>
-          <p>C: {close_price}</p>
-          <p
-            className={`${
-              open_price < close_price
-                ? "text-green-500"
+        <h1 className="italic mt-4 text-lg mb-2">Price Action On: {market_date}</h1>
+        {open_price ? (
+          <div className="flex flex-row space-x-4">
+            <p>O: {open_price}</p>
+            <p>C: {close_price}</p>
+            <p
+              className={`${
+                open_price < close_price
+                  ? "text-green-500"
+                  : open_price > close_price
+                  ? "text-red-500"
+                  : ""
+              }`}
+            >
+              {open_price < close_price
+                ? "▲"
                 : open_price > close_price
-                ? "text-red-500"
-                : ""
-            }`}
-          >
-            {open_price < close_price
-              ? "▲"
-              : open_price > close_price
-              ? "▼"
-              : ""}
-            {getDifference(open_price, close_price)} (
-            {getPriceAction(open_price, close_price)}%)
-          </p>
-        </div>
+                ? "▼"
+                : ""}
+              {getDifference(open_price, close_price)} (
+              {getPriceAction(open_price, close_price)}%)
+            </p>
+          </div>
+        ) : (
+          <h1>Not available yet</h1>
+        )}
 
         <a
           href={article_url}
