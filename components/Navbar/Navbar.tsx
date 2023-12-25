@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import NavLink from "@/components/Navbar/NavLink";
 import SearchBar from "@/components/Navbar/SearchBar";
 import ThemeToggle from "@/components/Navbar/ThemeToggle";
+import Image from "next/image";
+import Logo from "../../app/logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,12 +17,9 @@ const Navbar = () => {
 
   return (
     <nav className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 mt-5">
-      <div className="flex items-center space-x-3 rtl:space-x-reverse">
-        <img
-          src="https://flowbite.com/docs/images/logo.svg"
-          className="h-8"
-          alt="Flowbite Logo"
-        />
+      <div className="flex items-center space-x-1 rtl:space-x-reverse">
+        <Image src={Logo} className="h-20 w-20" alt="Logo" />
+        <div></div>
         <span className="self-center text-3xl font-semibold whitespace-nowrap">
           Sentiment News
         </span>
