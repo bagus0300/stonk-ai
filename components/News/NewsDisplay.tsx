@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Article } from "@/types/Article";
-import Card from "@/components/Card";
+import Card from "@/components/News/Card";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);

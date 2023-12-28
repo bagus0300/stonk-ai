@@ -1,4 +1,4 @@
-import NewsDisplay from "@/components/NewsDisplay";
+import NewsDisplay from "@/components/News/NewsDisplay";
 
 export const metadata = {
   title: "Sentiment News",
