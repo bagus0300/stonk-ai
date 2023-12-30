@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Article } from "@/types/Article";
+import { SearchContext, SearchContextProps } from "@/contexts/SearchContext";
 import Card from "@/components/News/Card";
 import Loading from "@/components/Loader/Loading";
 
@@ -9,13 +10,16 @@ const NewsDisplay = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const { searchQuery, category } = useContext(
+    SearchContext
+  ) as SearchContextProps;
 
   const loadArticles = async () => {
     try {
       if (!loading) {
         setLoadingMore(true);
       }
-      
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${page}`
       );
@@ -27,6 +31,23 @@ const NewsDisplay = () => {
       console.error("Error fetching data:", error);
     } finally {
       setLoadingMore(false);
+    }
+  };
+
+  const filterArticlesUsingSearch = () => {
+    if (category === "News" && searchQuery.length !== 0 && articles) {
+      const searchWords = new Set(searchQuery.toLowerCase().split(/\s+/));
+      const filteredData = articles.filter((item: Article) => {
+        const titleWords = item.title.toLowerCase().split(/\s+/);
+        const titleMatch = titleWords.some((word) => searchWords.has(word));
+        const tickerMatch = searchWords.has(item.ticker.toLowerCase());
+        const sentimentMatch = searchWords.has(item.sentiment.toLowerCase());
+        return titleMatch || tickerMatch || sentimentMatch;
+      });
+
+      return filteredData;
+    } else {
+      return articles;
     }
   };
 
@@ -44,7 +65,7 @@ const NewsDisplay = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {articles.map((article, index) => (
+            {filterArticlesUsingSearch().map((article, index) => (
               <Card
                 key={index}
                 title={article.title}

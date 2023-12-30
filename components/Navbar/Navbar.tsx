@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { SearchContext, SearchContextProps } from "@/contexts/SearchContext";
 import NavLink from "@/components/Navbar/NavLink";
 import SearchBar from "@/components/Navbar/SearchBar";
 import ThemeToggle from "@/components/Navbar/ThemeToggle";
@@ -10,10 +11,18 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedNavLink, setSelectedNavLink] = useState("News");
   const [results, setResults] = useState("");
+  const { updateSearchQuery, updateCategory } = useContext(
+    SearchContext
+  ) as SearchContextProps;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  useEffect(() => {
+    updateSearchQuery(results);
+    updateCategory(selectedNavLink);
+  }, [results, selectedNavLink]);
 
   return (
     <nav className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 mt-5">
