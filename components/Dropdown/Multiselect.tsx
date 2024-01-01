@@ -7,7 +7,11 @@ interface MultiSelectDropdownProps {
   setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({ originalOptions, selectedOptions, setSelectedOptions }) => {
+const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
+  originalOptions,
+  selectedOptions,
+  setSelectedOptions,
+}) => {
   const [open, setOpen] = React.useState(false);
   const [filter, setFilter] = React.useState<string>("");
 
@@ -21,7 +25,9 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({ originalOptio
 
   const handleCheckboxChange = (value: string) => {
     if (selectedOptions.includes(value)) {
-      setSelectedOptions((prevOptions) => prevOptions.filter((selectedOptions) => selectedOptions !== value));
+      setSelectedOptions((prevOptions) =>
+        prevOptions.filter((selectedOptions) => selectedOptions !== value)
+      );
     } else {
       setSelectedOptions((prevOptions) => [...prevOptions, value]);
     }
@@ -53,7 +59,9 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({ originalOptio
               key={name}
               className="flex items-center"
               style={{
-                display: name.toLowerCase().includes(filter.toLowerCase()) ? "flex" : "none",
+                display: name.toLowerCase().includes(filter.toLowerCase())
+                  ? "flex"
+                  : "none",
               }}
             >
               <input

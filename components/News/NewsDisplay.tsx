@@ -5,6 +5,7 @@ import { SearchContext, SearchContextProps } from "@/contexts/SearchContext";
 import Card from "@/components/News/Card";
 import Loading from "@/components/Loader/Loading";
 import MultiSelectDropdown from "@/components/Dropdown/Multiselect";
+import SingleSelectDropdown from "@/components/Dropdown/Singleselect";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -13,6 +14,10 @@ const NewsDisplay = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [originalTickers, setOriginalTickers] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
+  const sentimentOptions = ["Positive", "Negative", "Neutral"];
+  const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
+    null
+  );
   const { searchQuery, category } = useContext(
     SearchContext
   ) as SearchContextProps;
@@ -49,6 +54,12 @@ const NewsDisplay = () => {
     }
   };
 
+  useEffect(() => {
+    loadArticles();
+    setLoading(false);
+  }, []);
+
+  // Filter by keyword using searchbar
   const filterArticlesUsingSearch = () => {
     if (category === "News" && searchQuery.length !== 0 && articles) {
       const searchWords = new Set(searchQuery.toLowerCase().split(/\s+/));
@@ -65,6 +76,7 @@ const NewsDisplay = () => {
     }
   };
 
+  // Filter by stock multiselect dropdown
   const filterArticlesByTicker = (articles: Article[]) => {
     const selected = new Set(selectedTickers);
     if (selected.size != 0) {
@@ -77,18 +89,28 @@ const NewsDisplay = () => {
     }
   };
 
+  // Filter by sentiment dropdown
+  const filterArticlesBySentiment = (articles: Article[]) => {
+    if (selectedSentiment) {
+      const filteredArticles = articles.filter((article) => {
+        return selectedSentiment === article.sentiment;
+      });
+      return filteredArticles;
+    } else {
+      return articles;
+    }
+  };
+
   const filterArticles = () => {
     const articlesFilteredBySearch = filterArticlesUsingSearch();
     const articlesFilteredByTicker = filterArticlesByTicker(
       articlesFilteredBySearch
     );
-    return articlesFilteredByTicker;
+    const articlesFilteredBySentiment = filterArticlesBySentiment(
+      articlesFilteredByTicker
+    );
+    return articlesFilteredBySentiment;
   };
-
-  useEffect(() => {
-    loadArticles();
-    setLoading(false);
-  }, []);
 
   return (
     <div className="max-w-screen-lg mx-auto mt-3 mb-20">
@@ -102,11 +124,16 @@ const NewsDisplay = () => {
             <div className="font-bold text-5xl mb-2">News</div>
             <div className="mt-3 text-xl">View the latest financial news</div>
             <div className="border-b border-gray-400 mb-2m mt-3"></div>
-            <div className="mt-5">
+            <div className="mt-5 flex gap-3">
               <MultiSelectDropdown
                 originalOptions={originalTickers}
                 selectedOptions={selectedTickers}
                 setSelectedOptions={setSelectedTickers}
+              />
+              <SingleSelectDropdown
+                originalOptions={sentimentOptions}
+                selectedOption={selectedSentiment}
+                setSelectedOption={setSelectedSentiment}
               />
             </div>
           </div>
