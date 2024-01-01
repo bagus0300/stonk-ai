@@ -23,7 +23,7 @@ const NavLink: React.FC<NavLinkProps> = ({
         href={href}
         className={`
           block relative py-2 px-3 text-xl rounded md:p-0 dark:border-gray-700
-          ${isSelected ? "md:hover:bg-transparent" : "hover:text-red-400 group"}
+          ${isSelected ? "text-red-400 md:hover:bg-transparent" : "hover:text-red-400 group"}
         `}
         onClick={handleClick}
       >
