@@ -2,12 +2,14 @@ import React from "react";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 
 interface SingleSelectDropdownProps {
+  placeholder: string | null
   originalOptions: string[];
   selectedOption: string | null;
   setSelectedOption: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
+  placeholder,
   originalOptions,
   selectedOption,
   setSelectedOption,
@@ -35,7 +37,7 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
         className="p-3 rounded-3xl flex items-center gap-2 border border-neutral-300 cursor-pointer truncate h-10 bg-white text-black relative"
       >
         <div className="w-4 h-4 ml-2 rounded-full border border-neutral-300 absolute left-0"></div>
-        {selectedOption || "Sentiment"}
+        {selectedOption || placeholder}
         <div className="ml-auto">
           <MdKeyboardDoubleArrowDown />
         </div>

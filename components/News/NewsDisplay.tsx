@@ -18,6 +18,10 @@ const NewsDisplay = () => {
   const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
     null
   );
+  const priceActionOptions = ["Positive", "Negative", "NA"];
+  const [selectedPriceAction, setSelectedPriceAction] = useState<string | null>(
+    null
+  );
   const { searchQuery, category } = useContext(
     SearchContext
   ) as SearchContextProps;
@@ -79,10 +83,10 @@ const NewsDisplay = () => {
   // Filter by stock multiselect dropdown
   const filterArticlesByTicker = (articles: Article[]) => {
     const selected = new Set(selectedTickers);
-    if (selected.size != 0) {
-      const filteredArticles = articles.filter((article) => {
-        return selected.has(article.ticker);
-      });
+    if (selected.size !== 0) {
+      const filteredArticles = articles.filter((article) =>
+        selected.has(article.ticker)
+      );
       return filteredArticles;
     } else {
       return articles;
@@ -92,25 +96,39 @@ const NewsDisplay = () => {
   // Filter by sentiment dropdown
   const filterArticlesBySentiment = (articles: Article[]) => {
     if (selectedSentiment) {
-      const filteredArticles = articles.filter((article) => {
-        return selectedSentiment === article.sentiment;
-      });
-      return filteredArticles;
+      return articles.filter(
+        (article) => selectedSentiment === article.sentiment
+      );
     } else {
       return articles;
     }
   };
 
-  const filterArticles = () => {
-    const articlesFilteredBySearch = filterArticlesUsingSearch();
-    const articlesFilteredByTicker = filterArticlesByTicker(
-      articlesFilteredBySearch
-    );
-    const articlesFilteredBySentiment = filterArticlesBySentiment(
-      articlesFilteredByTicker
-    );
-    return articlesFilteredBySentiment;
+  // Filter by price action dropdown
+  const filterArticlesByPrice = (articles: Article[]) => {
+    return articles.filter((article) => {
+      switch (selectedPriceAction) {
+        case "Positive":
+          console.log(article.close_price)
+          return article.close_price > article.open_price;
+        case "Negative":
+          return article.close_price < article.open_price;
+          case "NA":
+            return article.close_price == null
+        default:
+          return true;
+      }
+    });
   };
+
+  const filterArticles = () =>
+    filterArticlesByPrice(
+      filterArticlesBySentiment(
+        filterArticlesByTicker(filterArticlesUsingSearch())
+      )
+    );
+  
+  const filteredArticles = filterArticles()
 
   return (
     <div className="max-w-screen-lg mx-auto mt-3 mb-20">
@@ -131,15 +149,22 @@ const NewsDisplay = () => {
                 setSelectedOptions={setSelectedTickers}
               />
               <SingleSelectDropdown
+                placeholder={"Sentiment"}
                 originalOptions={sentimentOptions}
                 selectedOption={selectedSentiment}
                 setSelectedOption={setSelectedSentiment}
+              />
+              <SingleSelectDropdown
+                placeholder={"Price Action"}
+                originalOptions={priceActionOptions}
+                selectedOption={selectedPriceAction}
+                setSelectedOption={setSelectedPriceAction}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-5 mx-10">
-            {filterArticles().map((article: Article, index: number) => (
+            {filteredArticles.map((article: Article, index: number) => (
               <Card
                 key={index}
                 title={article.title}
@@ -155,20 +180,25 @@ const NewsDisplay = () => {
               />
             ))}
           </div>
+
           <div className="flex justify-center">
             {loadingMore ? (
               <div className="mt-10">
                 <Loading />
               </div>
             ) : (
-              <button
-                className={
-                  "mt-10 border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transform hover:scale-105 font-semibold py-2 px-4 rounded inline-block transition duration-300 ease-in-out cursor-pointer"
-                }
-                onClick={loadArticles}
-              >
-                Load More
-              </button>
+              filteredArticles.length != 0 ? (
+                <button
+                  className={
+                    "mt-10 border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transform hover:scale-105 font-semibold py-2 px-4 rounded inline-block transition duration-300 ease-in-out cursor-pointer"
+                  }
+                  onClick={loadArticles}
+                >
+                  Load More
+                </button>
+              ) : (
+                <div>No Articles Available</div>
+              )
             )}
           </div>
         </>
