@@ -5,12 +5,14 @@ interface MultiSelectDropdownProps {
   originalOptions: string[];
   selectedOptions: string[];
   setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>;
+  handleSubmit: () => void;
 }
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   originalOptions,
   selectedOptions,
   setSelectedOptions,
+  handleSubmit,
 }) => {
   const [open, setOpen] = React.useState(false);
   const [filter, setFilter] = React.useState<string>("");
@@ -54,32 +56,36 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
             type="text"
           />
 
-          {originalOptions.map((name) => (
-            <div
-              key={name}
-              className="flex items-center"
-              style={{
-                display: name.toLowerCase().includes(filter.toLowerCase())
-                  ? "flex"
-                  : "none",
-              }}
-            >
-              <input
-                checked={selectedOptions.includes(name)}
-                onChange={() => handleCheckboxChange(name)}
-                id={name.toLowerCase()}
-                type="checkbox"
-                value={name}
-                className="w-4 h-4 hover:cursor-pointer rounded dark:accent-blue-100"
-              />
-              <label
-                htmlFor={name.toLowerCase()}
-                className="ml-2 text-sm font-medium hover:cursor-pointer text-gray-900 flex-grow"
+          <div className="grid grid-cols-2 gap-4">
+            {originalOptions.map((name) => (
+              <div
+                key={name}
+                className={`flex items-center ${
+                  name.toLowerCase().includes(filter.toLowerCase())
+                    ? "flex"
+                    : "hidden"
+                }`}
               >
-                {name}
-              </label>
-            </div>
-          ))}
+                <input
+                  checked={selectedOptions.includes(name)}
+                  onChange={() => handleCheckboxChange(name)}
+                  id={name.toLowerCase()}
+                  type="checkbox"
+                  value={name}
+                  className="w-4 h-4 hover:cursor-pointer rounded dark:accent-blue-100"
+                />
+                <label
+                  htmlFor={name.toLowerCase()}
+                  className="ml-2 text-sm font-medium hover:cursor-pointer text-gray-900 flex-grow"
+                >
+                  {name}
+                </label>
+              </div>
+            ))}
+          </div>
+          <button className="text-black" onClick={handleSubmit}>
+            Submit
+          </button>
         </div>
       )}
     </div>

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 
 interface SingleSelectDropdownProps {
-  placeholder: string | null
+  placeholder: string | null;
   originalOptions: string[];
   selectedOption: string | null;
   setSelectedOption: React.Dispatch<React.SetStateAction<string | null>>;
@@ -14,7 +14,7 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
   selectedOption,
   setSelectedOption,
 }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleToggleDropdown = () => {
     setOpen(!open);
@@ -26,8 +26,6 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
     } else {
       setSelectedOption(value);
     }
-
-    setOpen(false);
   };
 
   return (

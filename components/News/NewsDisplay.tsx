@@ -9,10 +9,31 @@ import SingleSelectDropdown from "@/components/Dropdown/Singleselect";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [page, setPage] = useState(1);
+  const [cursor, setCursor] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [originalTickers, setOriginalTickers] = useState<string[]>([]);
+  const tickerOptions = [
+    "AAPL",
+    "MSFT",
+    "AMZN",
+    "GOOGL",
+    "TSLA",
+    "JPM",
+    "V",
+    "FB",
+    "NVDA",
+    "NFLX",
+    "DIS",
+    "PYPL",
+    "BA",
+    "JNJ",
+    "KO",
+    "PFE",
+    "AMD",
+    "XOM",
+    "T",
+    "WMT",
+  ];
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const sentimentOptions = ["Positive", "Negative", "Neutral"];
   const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
@@ -28,107 +49,43 @@ const NewsDisplay = () => {
 
   const loadArticles = async () => {
     try {
-      if (!loading) {
-        setLoadingMore(true);
-      }
+      const queryParams = new URLSearchParams({
+        cursor: cursor.toString(),
+        search_query: searchQuery || "",
+        tickers: selectedTickers.join(","),
+        sentiment: selectedSentiment || "",
+        price_action: selectedPriceAction || "",
+      });
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${page}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles?${queryParams}`
       );
-
-      // Add new articles
-      const data = await response.json();
-      setArticles((prevArticles) => [...prevArticles, ...data.articles]);
-      setPage((prevPage) => prevPage + 1);
-
-      // Update dropdown tickers
-      setOriginalTickers((prevTickers) => {
-        const newTickers = Array.from(
-          new Set([
-            ...prevTickers,
-            ...data.articles.flatMap((article: Article) => article.ticker),
-          ])
-        );
-        return newTickers;
-      });
+      return await response.json();
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
-      setLoadingMore(false);
     }
+  };
+
+  const getNewlyFilteredArticles = async () => {
+    setLoading(true);
+    setCursor(0);
+    const data = await loadArticles();
+    setArticles(data.articles);
+    setCursor(data.cursor);
+    setLoading(false);
+  };
+
+  const loadNextPageArticles = async () => {
+    setLoadingMore(true);
+    const data = await loadArticles();
+    setArticles((prevArticles) => [...prevArticles, ...data.articles]);
+    setCursor(data.cursor);
+    setLoadingMore(false);
   };
 
   useEffect(() => {
-    loadArticles();
-    setLoading(false);
-  }, []);
-
-  // Filter by keyword using searchbar
-  const filterArticlesUsingSearch = () => {
-    if (category === "News" && searchQuery.length !== 0 && articles) {
-      const searchWords = new Set(searchQuery.toLowerCase().split(/\s+/));
-      const filteredArticles = articles.filter((item: Article) => {
-        const titleWords = item.title.toLowerCase().split(/\s+/);
-        const titleMatch = titleWords.some((word) => searchWords.has(word));
-        const tickerMatch = searchWords.has(item.ticker.toLowerCase());
-        const sentimentMatch = searchWords.has(item.sentiment.toLowerCase());
-        return titleMatch || tickerMatch || sentimentMatch;
-      });
-      return filteredArticles;
-    } else {
-      return articles;
-    }
-  };
-
-  // Filter by stock multiselect dropdown
-  const filterArticlesByTicker = (articles: Article[]) => {
-    const selected = new Set(selectedTickers);
-    if (selected.size !== 0) {
-      const filteredArticles = articles.filter((article) =>
-        selected.has(article.ticker)
-      );
-      return filteredArticles;
-    } else {
-      return articles;
-    }
-  };
-
-  // Filter by sentiment dropdown
-  const filterArticlesBySentiment = (articles: Article[]) => {
-    if (selectedSentiment) {
-      return articles.filter(
-        (article) => selectedSentiment === article.sentiment
-      );
-    } else {
-      return articles;
-    }
-  };
-
-  // Filter by price action dropdown
-  const filterArticlesByPrice = (articles: Article[]) => {
-    return articles.filter((article) => {
-      switch (selectedPriceAction) {
-        case "Positive":
-          console.log(article.close_price)
-          return article.close_price > article.open_price;
-        case "Negative":
-          return article.close_price < article.open_price;
-          case "NA":
-            return article.close_price == null
-        default:
-          return true;
-      }
-    });
-  };
-
-  const filterArticles = () =>
-    filterArticlesByPrice(
-      filterArticlesBySentiment(
-        filterArticlesByTicker(filterArticlesUsingSearch())
-      )
-    );
-  
-  const filteredArticles = filterArticles()
+    getNewlyFilteredArticles();
+  }, [selectedSentiment, selectedPriceAction]);
 
   return (
     <div className="max-w-screen-lg mx-auto mt-3 mb-20">
@@ -144,9 +101,10 @@ const NewsDisplay = () => {
             <div className="border-b border-gray-400 mb-2m mt-3"></div>
             <div className="mt-5 flex gap-3">
               <MultiSelectDropdown
-                originalOptions={originalTickers}
+                originalOptions={tickerOptions}
                 selectedOptions={selectedTickers}
                 setSelectedOptions={setSelectedTickers}
+                handleSubmit={getNewlyFilteredArticles}
               />
               <SingleSelectDropdown
                 placeholder={"Sentiment"}
@@ -164,7 +122,7 @@ const NewsDisplay = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-5 mx-10">
-            {filteredArticles.map((article: Article, index: number) => (
+            {articles.map((article: Article, index: number) => (
               <Card
                 key={index}
                 title={article.title}
@@ -186,19 +144,17 @@ const NewsDisplay = () => {
               <div className="mt-10">
                 <Loading />
               </div>
+            ) : articles.length != 0 ? (
+              <button
+                className={
+                  "mt-10 border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transform hover:scale-105 font-semibold py-2 px-4 rounded inline-block transition duration-300 ease-in-out cursor-pointer"
+                }
+                onClick={loadNextPageArticles}
+              >
+                Load More
+              </button>
             ) : (
-              filteredArticles.length != 0 ? (
-                <button
-                  className={
-                    "mt-10 border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transform hover:scale-105 font-semibold py-2 px-4 rounded inline-block transition duration-300 ease-in-out cursor-pointer"
-                  }
-                  onClick={loadArticles}
-                >
-                  Load More
-                </button>
-              ) : (
-                <div>No Articles Available</div>
-              )
+              <div>No Articles Available</div>
             )}
           </div>
         </>
