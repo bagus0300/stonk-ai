@@ -85,7 +85,7 @@ const NewsDisplay = () => {
 
   useEffect(() => {
     getNewlyFilteredArticles();
-  }, [selectedSentiment, selectedPriceAction]);
+  }, [selectedSentiment, selectedPriceAction, searchQuery]);
 
   return (
     <div className="max-w-screen-lg mx-auto mt-3 mb-20">
