@@ -90,10 +90,9 @@ const NewsDisplay = () => {
   return (
     <div className="max-w-screen-lg mx-auto mt-3 mb-20">
       <div className="mx-10">
-        <div className="font-bold text-5xl mb-2">News</div>
+        <div className="font-bold text-4xl sm:text-5xl mb-2">News</div>
         <div className="mt-3 text-xl">View the latest financial news</div>
-        <div className="border-b border-gray-400 mb-2m mt-3"></div>
-        <div className="mt-5 flex gap-3"></div>
+        <div className="border-b border-gray-400 mb-8 mt-8" />
         <div className="flex flex-row items-center space-x-3">
           <MultiSelectDropdown
             originalOptions={tickerOptions}
@@ -114,14 +113,14 @@ const NewsDisplay = () => {
             setSelectedOption={setSelectedPriceAction}
           />
         </div>
-        <div />
+
         {loading ? (
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
             <Loading />
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-7 mx-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
               {articles.map((article: Article, index: number) => (
                 <Card
                   key={index}
