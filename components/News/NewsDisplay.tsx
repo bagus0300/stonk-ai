@@ -12,28 +12,7 @@ const NewsDisplay = () => {
   const [cursor, setCursor] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const tickerOptions = [
-    "AAPL",
-    "MSFT",
-    "AMZN",
-    "GOOGL",
-    "TSLA",
-    "JPM",
-    "V",
-    "FB",
-    "NVDA",
-    "NFLX",
-    "DIS",
-    "PYPL",
-    "BA",
-    "JNJ",
-    "KO",
-    "PFE",
-    "AMD",
-    "XOM",
-    "T",
-    "WMT",
-  ];
+  const [tickerOptions, setTickerOptions] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const sentimentOptions = ["Positive", "Negative", "Neutral"];
   const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
@@ -60,9 +39,26 @@ const NewsDisplay = () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles?${queryParams}`
       );
-      return await response.json();
+      if (response.ok) {
+        return await response.json();
+      }
+      return [];
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching articles: ", error);
+    }
+  };
+
+  const getTickers = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/tickers`
+      );
+      const tickers = await response.json();
+      if (Array.isArray(tickers)) {
+        setTickerOptions(tickers);
+      }
+    } catch (error) {
+      console.log("Error fetching tickers: ", error);
     }
   };
 
@@ -70,11 +66,9 @@ const NewsDisplay = () => {
     setLoading(true);
     setCursor(0);
     const data = await loadArticles();
-    if (data) {
-      setArticles(data.articles);
-      setCursor(data.cursor);
-      setLoading(false);
-    }
+    setArticles(data.articles);
+    setCursor(data.cursor);
+    setLoading(false);
   };
 
   const loadNextPageArticles = async () => {
@@ -88,6 +82,10 @@ const NewsDisplay = () => {
   useEffect(() => {
     getNewlyFilteredArticles();
   }, [selectedSentiment, selectedPriceAction, searchQuery]);
+
+  useEffect(() => {
+    getTickers();
+  }, []);
 
   return (
     <div className="max-w-screen-lg mx-auto mt-3 mb-20">
