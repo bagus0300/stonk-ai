@@ -3,9 +3,9 @@ import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 
 interface SingleSelectDropdownProps {
   placeholder: string | null;
-  originalOptions: string[];
-  selectedOption: string | null;
-  setSelectedOption: React.Dispatch<React.SetStateAction<string | null>>;
+  originalOptions: Map<number, string>;
+  selectedOption: number | null;
+  setSelectedOption: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
@@ -20,11 +20,11 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
     setOpen(!open);
   };
 
-  const handleOptionSelect = (value: string) => {
-    if (value === selectedOption) {
+  const handleOptionSelect = (key: number) => {
+    if (key === selectedOption) {
       setSelectedOption(null);
     } else {
-      setSelectedOption(value);
+      setSelectedOption(key);
     }
   };
 
@@ -35,26 +35,28 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
         className="p-3 rounded-3xl flex items-center gap-2 border border-neutral-300 cursor-pointer truncate h-10 bg-white text-black relative"
       >
         <div className="w-4 h-4 ml-2 rounded-full border border-neutral-300 absolute left-0"></div>
-        {selectedOption || placeholder}
+        {selectedOption !== null
+          ? originalOptions.get(selectedOption)
+          : placeholder}
         <div className="ml-auto">
           <MdKeyboardDoubleArrowDown />
         </div>
       </div>
       {open && (
         <div className="p-3 rounded-lg flex gap-3 w-full shadow-lg x-50 absolute flex-col bg-white dark:bg-gray-200 mt-3">
-          {originalOptions.map((name) => (
-            <div key={name} className="flex items-center">
+          {Array.from(originalOptions.entries()).map(([key, value]) => (
+            <div key={key} className="flex items-center">
               <div
-                onClick={() => handleOptionSelect(name)}
+                onClick={() => handleOptionSelect(key)}
                 className={`w-4 h-4 ml-2 hover:cursor-pointer rounded-full border border-neutral-300 ${
-                  selectedOption === name ? "bg-blue-400" : ""
+                  selectedOption === key ? "bg-blue-400" : ""
                 }`}
               />
               <label
-                onClick={() => handleOptionSelect(name)}
+                onClick={() => handleOptionSelect(key)}
                 className="ml-2 text-sm font-medium hover:cursor-pointer text-gray-900 flex-grow"
               >
-                {name}
+                {value}
               </label>
             </div>
           ))}

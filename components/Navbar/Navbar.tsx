@@ -28,7 +28,6 @@ const Navbar = () => {
     <nav className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 mt-5">
       <div className="flex items-center space-x-1 rtl:space-x-reverse">
       <Image src={Logo} className="h-12 w-12 sm:h-20 sm:w-20" alt="Logo" />
-        <div></div>
         <span className="self-center text-2xl md:text-3xl sm:text-2xl font-semibold whitespace-nowrap">
           Sentiment News
         </span>
@@ -85,7 +84,7 @@ const Navbar = () => {
           />
           <NavLink
             name={"Stocks"}
-            href={"#"}
+            href={"/stocks"}
             isSelected={selectedNavLink === "Stocks"}
             setSelectedNavLink={setSelectedNavLink}
           />

@@ -1,39 +1,81 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
+
 import { Article } from "@/types/Article";
 import { SearchContext, SearchContextProps } from "@/contexts/SearchContext";
 import Card from "@/components/News/Card";
 import Loading from "@/components/Loader/Loading";
 import MultiSelectDropdown from "@/components/Dropdown/Multiselect";
 import SingleSelectDropdown from "@/components/Dropdown/Singleselect";
+import { getDateDaysBefore } from "@/utils/FilterUtils";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [cursor, setCursor] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [tickerOptions, setTickerOptions] = useState<string[]>([]);
-  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
-  const sentimentOptions = ["Positive", "Negative", "Neutral"];
-  const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
-    null
-  );
-  const priceActionOptions = ["Positive", "Negative", "NA"];
-  const [selectedPriceAction, setSelectedPriceAction] = useState<string | null>(
-    null
-  );
   const { searchQuery, category } = useContext(
     SearchContext
   ) as SearchContextProps;
 
+  const [tickerOptions, setTickerOptions] = useState<string[]>([]);
+  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
+  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(
+    null
+  );
+  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(
+    null
+  );
+  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(
+    null
+  );
+
+  const sentimentOptions = new Map<number, string>([
+    [0, "Positive"],
+    [1, "Negative"],
+    [2, "Neutral"],
+  ]);
+
+  const priceActionOptions = new Map<number, string>([
+    [0, "Positive"],
+    [1, "Negative"],
+    [2, "NA"],
+  ]);
+
+  const dateRangeOptions = new Map<number, string>([
+    [0, "Last 24 hours"],
+    [1, "Last 3 days"],
+    [2, "Last week"],
+  ]);
+
+  const dateRanges = new Map<number, Array<string>>([
+    [0, [getDateDaysBefore(1), getDateDaysBefore(0)]],
+    [1, [getDateDaysBefore(3), getDateDaysBefore(0)]],
+    [2, [getDateDaysBefore(7), getDateDaysBefore(0)]],
+  ]);
+
   const loadArticles = async () => {
     try {
+      const sentiment = selectedSentiment
+        ? sentimentOptions.get(selectedSentiment) || ""
+        : "";
+      const priceAction = selectedPriceAction
+        ? priceActionOptions.get(selectedPriceAction) || ""
+        : "";
+      const dateRange = selectedDateRange != null
+        ? dateRanges.get(selectedDateRange)
+        : null;
+      const startDate = dateRange ? dateRange[0] : "";
+      const endDate = dateRange ? dateRange[1] : "";
+
       const queryParams = new URLSearchParams({
         cursor: cursor.toString(),
         search_query: searchQuery || "",
         tickers: selectedTickers.join(","),
-        sentiment: selectedSentiment || "",
-        price_action: selectedPriceAction || "",
+        sentiment: sentiment,
+        price_action: priceAction,
+        start_date: startDate,
+        end_date: endDate,
       });
 
       const response = await fetch(
@@ -81,7 +123,7 @@ const NewsDisplay = () => {
 
   useEffect(() => {
     getNewlyFilteredArticles();
-  }, [selectedSentiment, selectedPriceAction, searchQuery]);
+  }, [selectedSentiment, selectedPriceAction, searchQuery, selectedDateRange]);
 
   useEffect(() => {
     getTickers();
@@ -112,10 +154,16 @@ const NewsDisplay = () => {
             selectedOption={selectedPriceAction}
             setSelectedOption={setSelectedPriceAction}
           />
+          <SingleSelectDropdown
+            placeholder={"Date"}
+            originalOptions={dateRangeOptions}
+            selectedOption={selectedDateRange}
+            setSelectedOption={setSelectedDateRange}
+          />
         </div>
 
         {loading ? (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+          <div className="fixed top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
             <Loading />
           </div>
         ) : (
