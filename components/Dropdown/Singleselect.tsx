@@ -34,7 +34,6 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
         onClick={handleToggleDropdown}
         className="p-3 rounded-3xl flex items-center gap-2 border border-neutral-300 cursor-pointer truncate h-10 bg-white text-black relative"
       >
-        <div className="w-4 h-4 ml-2 rounded-full border border-neutral-300 absolute left-0"></div>
         {selectedOption !== null
           ? originalOptions.get(selectedOption)
           : placeholder}
