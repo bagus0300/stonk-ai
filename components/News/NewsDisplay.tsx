@@ -56,10 +56,10 @@ const NewsDisplay = () => {
 
   const loadArticles = async () => {
     try {
-      const sentiment = selectedSentiment
+      const sentiment = selectedSentiment != null
         ? sentimentOptions.get(selectedSentiment) || ""
         : "";
-      const priceAction = selectedPriceAction
+      const priceAction = selectedPriceAction != null
         ? priceActionOptions.get(selectedPriceAction) || ""
         : "";
       const dateRange = selectedDateRange != null
