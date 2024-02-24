@@ -54,7 +54,7 @@ const NewsDisplay = () => {
     [2, [getDateDaysBefore(7), getDateDaysBefore(0)]],
   ]);
 
-  const loadArticles = async () => {
+  const loadArticles = async (resetCursor: boolean) => {
     try {
       const sentiment = selectedSentiment != null
         ? sentimentOptions.get(selectedSentiment) || ""
@@ -67,9 +67,12 @@ const NewsDisplay = () => {
         : null;
       const startDate = dateRange ? dateRange[0] : "";
       const endDate = dateRange ? dateRange[1] : "";
-
+      let start_cursor = cursor
+      if (resetCursor) {
+        start_cursor = 0
+      }
       const queryParams = new URLSearchParams({
-        cursor: cursor.toString(),
+        cursor: start_cursor.toString(),
         search_query: searchQuery || "",
         tickers: selectedTickers.join(","),
         sentiment: sentiment,
@@ -106,8 +109,7 @@ const NewsDisplay = () => {
 
   const getNewlyFilteredArticles = async () => {
     setLoading(true);
-    setCursor(0);
-    const data = await loadArticles();
+    const data = await loadArticles(true);
     setArticles(data.articles);
     setCursor(data.cursor);
     setLoading(false);
@@ -115,7 +117,7 @@ const NewsDisplay = () => {
 
   const loadNextPageArticles = async () => {
     setLoadingMore(true);
-    const data = await loadArticles();
+    const data = await loadArticles(false);
     setArticles((prevArticles) => [...prevArticles, ...data.articles]);
     setCursor(data.cursor);
     setLoadingMore(false);
