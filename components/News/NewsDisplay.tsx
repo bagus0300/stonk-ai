@@ -137,6 +137,7 @@ const NewsDisplay = () => {
         <div className="border-b border-gray-400 mb-8 mt-8" />
         <div className="flex flex-row items-center space-x-3">
           <MultiSelectDropdown
+            selectName={"Stocks"}
             originalOptions={tickerOptions}
             selectedOptions={selectedTickers}
             setSelectedOptions={setSelectedTickers}

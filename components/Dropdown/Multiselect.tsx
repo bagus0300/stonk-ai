@@ -2,6 +2,7 @@ import React, { ChangeEvent } from "react";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 
 interface MultiSelectDropdownProps {
+  selectName: string;
   originalOptions: string[];
   selectedOptions: string[];
   setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>;
@@ -9,6 +10,7 @@ interface MultiSelectDropdownProps {
 }
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
+  selectName,
   originalOptions,
   selectedOptions,
   setSelectedOptions,
@@ -39,15 +41,15 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     <div className="w-1/4 relative">
       <div
         onClick={handleToggleDropdown}
-        className="p-3 rounded-3xl flex items-center gap-2 border border-neutral-300 cursor-pointer truncate h-10 bg-white text-black"
+        className="p-3 text-xs lg:text-base rounded-3xl flex items-center gap-2 border border-neutral-300 cursor-pointer truncate h-10 bg-white text-black"
       >
-        Stocks
-        <div className="ml-auto">
+        {selectName}
+        <div className="hidden md:inline-block ml-auto">
           <MdKeyboardDoubleArrowDown />
         </div>
       </div>
       {open && (
-        <div className="p-3 rounded-lg flex gap-3 w-full shadow-lg x-50 absolute flex-col bg-white dark:bg-gray-200 mt-3">
+        <div className="p-3 rounded-lg flex gap-3 w-full shadow-lg x-50 absolute flex-col bg-white dark:bg-gray-200 mt-3 z-50">
           <input
             value={filter}
             onChange={handleFilterChange}
@@ -56,11 +58,11 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
             type="text"
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {originalOptions.map((name) => (
               <div
                 key={name}
-                className={`flex items-center ${
+                className={`flex items-center  ${
                   name.toLowerCase().includes(filter.toLowerCase())
                     ? "flex"
                     : "hidden"
@@ -72,11 +74,11 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                   id={name.toLowerCase()}
                   type="checkbox"
                   value={name}
-                  className="w-4 h-4 hover:cursor-pointer rounded dark:accent-blue-100"
+                  className="w-4 h-4 hover:cursor-pointer rounded"
                 />
                 <label
                   htmlFor={name.toLowerCase()}
-                  className="ml-2 text-sm font-medium hover:cursor-pointer text-gray-900 flex-grow"
+                  className="ml-2 text-xs lg:text-base hover:cursor-pointer text-gray-900 flex-grow"
                 >
                   {name}
                 </label>
