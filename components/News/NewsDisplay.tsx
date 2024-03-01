@@ -11,24 +11,16 @@ import { getDateDaysBefore } from "@/utils/FilterUtils";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [cursor, setCursor] = useState(0);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const { searchQuery, category } = useContext(
-    SearchContext
-  ) as SearchContextProps;
+  const { searchQuery, category } = useContext(SearchContext) as SearchContextProps;
 
   const [tickerOptions, setTickerOptions] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
-  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(
-    null
-  );
-  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(
-    null
-  );
-  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(
-    null
-  );
+  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(null);
+  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(null);
+  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(null);
 
   const sentimentOptions = new Map<number, string>([
     [0, "Positive"],
@@ -54,25 +46,22 @@ const NewsDisplay = () => {
     [2, [getDateDaysBefore(7), getDateDaysBefore(0)]],
   ]);
 
-  const loadArticles = async (resetCursor: boolean) => {
+  const loadArticles = async (curr_page: number) => {
     try {
       const sentiment = selectedSentiment != null
-        ? sentimentOptions.get(selectedSentiment) || ""
-        : "";
+          ? sentimentOptions.get(selectedSentiment) || ""
+          : "";
       const priceAction = selectedPriceAction != null
-        ? priceActionOptions.get(selectedPriceAction) || ""
-        : "";
-      const dateRange = selectedDateRange != null
-        ? dateRanges.get(selectedDateRange)
-        : null;
+          ? priceActionOptions.get(selectedPriceAction) || ""
+          : "";
+      const dateRange = selectedDateRange != null 
+          ? dateRanges.get(selectedDateRange) 
+          : null;
       const startDate = dateRange ? dateRange[0] : "";
       const endDate = dateRange ? dateRange[1] : "";
-      let start_cursor = cursor
-      if (resetCursor) {
-        start_cursor = 0
-      }
+
       const queryParams = new URLSearchParams({
-        cursor: start_cursor.toString(),
+        page: curr_page.toString(),
         search_query: searchQuery || "",
         tickers: selectedTickers.join(","),
         sentiment: sentiment,
@@ -84,6 +73,9 @@ const NewsDisplay = () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles?${queryParams}`
       );
+
+      setPage((prev) => prev + 1);
+
       if (response.ok) {
         return await response.json();
       }
@@ -109,17 +101,15 @@ const NewsDisplay = () => {
 
   const getNewlyFilteredArticles = async () => {
     setLoading(true);
-    const data = await loadArticles(true);
+    const data = await loadArticles(0);
     setArticles(data.articles);
-    setCursor(data.cursor);
     setLoading(false);
   };
 
   const loadNextPageArticles = async () => {
     setLoadingMore(true);
-    const data = await loadArticles(false);
+    const data = await loadArticles(page + 1);
     setArticles((prevArticles) => [...prevArticles, ...data.articles]);
-    setCursor(data.cursor);
     setLoadingMore(false);
   };
 
@@ -172,21 +162,22 @@ const NewsDisplay = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
-              {articles.map((article: Article, index: number) => (
-                <Card
-                  key={index}
-                  title={article.title}
-                  publication_datetime={article.publication_datetime}
-                  summary={article.summary}
-                  ticker={article.ticker}
-                  sentiment={article.sentiment}
-                  image_url={article.image_url}
-                  article_url={article.article_url}
-                  market_date={article.market_date}
-                  open_price={article.open_price}
-                  close_price={article.close_price}
-                />
-              ))}
+              {articles &&
+                articles.map((article: Article, index: number) => (
+                  <Card
+                    key={index}
+                    title={article.title}
+                    publication_datetime={article.publication_datetime}
+                    summary={article.summary}
+                    ticker={article.ticker}
+                    sentiment={article.sentiment}
+                    image_url={article.image_url}
+                    article_url={article.article_url}
+                    market_date={article.market_date}
+                    open_price={article.open_price}
+                    close_price={article.close_price}
+                  />
+                ))}
             </div>
 
             <div className="flex justify-center">
@@ -194,7 +185,7 @@ const NewsDisplay = () => {
                 <div className="mt-10">
                   <Loading />
                 </div>
-              ) : articles.length != 0 ? (
+              ) : articles && articles.length != 0 ? (
                 <button
                   className={
                     "mt-10 border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transform hover:scale-105 font-semibold py-2 px-4 rounded inline-block transition duration-300 ease-in-out cursor-pointer"
