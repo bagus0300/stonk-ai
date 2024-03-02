@@ -10,11 +10,16 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "@react-financial-charts/annotations": "^2.0.0",
+    "@react-financial-charts/axes": "^2.0.0",
     "@types/node": "20.2.4",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
+    "axios": "^1.6.7",
     "concurrently": "^8.0.1",
+    "d3-format": "^3.1.0",
+    "d3-time-format": "^4.1.0",
     "dotenv": "^16.3.1",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
@@ -25,8 +30,12 @@
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-financial-charts": "^2.0.1",
     "react-icons": "^4.12.0",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/d3-time-format": "^4.0.3"
   }
 }

@@ -88,7 +88,7 @@ const NewsDisplay = () => {
   const getTickers = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/tickers`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tickers`
       );
       const tickers = await response.json();
       if (Array.isArray(tickers)) {
