@@ -39,7 +39,7 @@ const LineChart = ({ symbol }: LineChartProps) => {
           params: {
             ticker: symbol,
             start_date: "2023-01-01",
-            end_date: "2024-03-01",
+            end_date: "2024-02-27",
             format: "json",
             resampleFreq: "monthly",
           },
@@ -64,8 +64,13 @@ const LineChart = ({ symbol }: LineChartProps) => {
   let priceLineColor = "blue"
   let priceFillColor = "rgb(173, 216, 230, 0.3)"
   if (data.length > 1 && data[data.length - 1].close > data[data.length - 2].close) {
-    priceLineColor = "green"
-    priceFillColor = "rgb(144, 238, 144, 0.3)"; 
+    if (theme == "light") {
+      priceLineColor = "rgba(30, 255, 100)"
+      priceFillColor = "rgb(144, 238, 144, 0.3)"; 
+    } else {
+      priceLineColor = "rgba(100, 255, 100)";
+      priceFillColor = "rgb(144, 238, 144, 0.2)"; 
+    }
   } else {
     priceLineColor = "red"
     priceFillColor = "rgb(255, 182, 193, 0.3)";
@@ -94,6 +99,7 @@ const LineChart = ({ symbol }: LineChartProps) => {
             ticks={6}
             gridLinesStrokeDasharray="Solid"
             gridLinesStrokeStyle="#e0e0e0"
+            tickFormat={timeFormat("%b")}
           />
           <YAxis
             axisAt="left"
