@@ -3,14 +3,12 @@ import React from "react";
 interface NavLinkProps {
   href: string;
   name: string;
-  isSelected: boolean;
   setSelectedNavLink: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const NavLink: React.FC<NavLinkProps> = ({
   href,
   name,
-  isSelected,
   setSelectedNavLink,
 }) => {
   const handleClick = () => {
@@ -21,10 +19,7 @@ const NavLink: React.FC<NavLinkProps> = ({
     <li>
       <a
         href={href}
-        className={`
-          block relative py-2 px-3 text-xl rounded md:p-0 dark:border-gray-700
-          ${isSelected ? "text-red-400 md:hover:bg-transparent" : "hover:text-red-400 group"}
-        `}
+        className={"block relative py-2 px-3 text-xl rounded md:p-0 dark:border-gray-700 hover:text-red-400 group"}
         onClick={handleClick}
       >
         {name}

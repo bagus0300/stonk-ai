@@ -78,20 +78,17 @@ const Navbar = () => {
         <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
           <NavLink
             name={"News"}
-            href={"#"}
-            isSelected={selectedNavLink === "News"}
+            href={"/news"}
             setSelectedNavLink={setSelectedNavLink}
           />
           <NavLink
             name={"Stocks"}
             href={"/stocks"}
-            isSelected={selectedNavLink === "Stocks"}
             setSelectedNavLink={setSelectedNavLink}
           />
           <NavLink
             name={"About"}
             href={"#"}
-            isSelected={selectedNavLink === "About"}
             setSelectedNavLink={setSelectedNavLink}
           />
         </ul>
