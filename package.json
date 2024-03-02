@@ -36,6 +36,8 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@types/d3-array": "^3.2.1",
+    "@types/d3-format": "^3.0.4",
     "@types/d3-time-format": "^4.0.3"
   }
 }

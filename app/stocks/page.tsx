@@ -1,9 +1,9 @@
 import React from 'react'
-import SmallChart from '@/components/Stocks/SmallChart'
+import LineChart from '@/components/Stocks/LineChart'
 
 const page = () => {
   return (
-    <SmallChart symbol="AAPL"/>
+    <LineChart symbol="AAPL"/>
   )
 }
 
