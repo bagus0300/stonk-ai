@@ -1,5 +1,5 @@
 import React from 'react'
-import LineChart from '@/components/Stocks/LineChart'
+import LineChart from '@/src/components/Stocks/LineChart'
 
 const page = () => {
   return (

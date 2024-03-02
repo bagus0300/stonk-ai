@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
-import { SearchContext, SearchContextProps } from "@/contexts/SearchContext";
-import NavLink from "@/components/Navbar/NavLink";
-import SearchBar from "@/components/Navbar/SearchBar";
-import ThemeToggle from "@/components/Navbar/ThemeToggle";
+import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
+import NavLink from "@/src/components/Navbar/NavLink";
+import SearchBar from "@/src/components/Navbar/SearchBar";
+import ThemeToggle from "@/src/components/Navbar/ThemeToggle";
 import Image from "next/image";
 import Logo from "../../app/logo.png";
 

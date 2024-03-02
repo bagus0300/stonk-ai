@@ -1,5 +1,5 @@
 import React from "react";
-import { Article } from "@/types/Article";
+import { Article } from "@/src/types/Article";
 
 const Card: React.FC<Article> = ({
   title,

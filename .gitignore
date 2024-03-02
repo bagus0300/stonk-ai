@@ -10,7 +10,7 @@
 error.log
 
 # next.js
-/.next/
+.next
 /out/
 
 # production

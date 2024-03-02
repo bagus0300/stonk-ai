@@ -49,7 +49,7 @@ const TooltipContent = {
         },
       ].map((line) => ({
         ...line,
-        stroke: undefined,
+        stroke: "undefined",
       })),
     };
   },

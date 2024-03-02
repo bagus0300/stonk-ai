@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
 
-import { Article } from "@/types/Article";
-import { SearchContext, SearchContextProps } from "@/contexts/SearchContext";
-import Card from "@/components/News/Card";
-import Loading from "@/components/Loader/Loading";
-import MultiSelectDropdown from "@/components/Dropdown/Multiselect";
-import SingleSelectDropdown from "@/components/Dropdown/Singleselect";
-import { getDateDaysBefore } from "@/utils/FilterUtils";
+import { Article } from "@/src/types/Article";
+import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
+import Card from "@/src/components/News/Card";
+import Loading from "@/src/components/Loader/Loading";
+import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
+import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
+import { getDateDaysBefore } from "@/src/utils/FilterUtils";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);

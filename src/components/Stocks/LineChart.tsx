@@ -16,7 +16,7 @@ import {
   HoverTooltip,
 } from "react-financial-charts";
 
-import TooltipContent from "@/components/Stocks/Tooltip"
+import TooltipContent from "@/src/components/Stocks/Tooltip"
 
 interface LineChartProps {
   symbol: string;
