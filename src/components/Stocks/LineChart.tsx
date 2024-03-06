@@ -31,6 +31,24 @@ const LineChart = ({ symbol }: LineChartProps) => {
   const [data, setData] = useState<ChartData[]>([]);
   const { theme } = useTheme();
 
+  const axisColor = theme === "light" ? "black" : "white";
+  const xAccessor = (d: ChartData) => d.date;
+
+  let priceLineColor = "blue"
+  let priceFillColor = "rgb(173, 216, 230, 0.3)"
+  if (data.length > 1 && data[data.length - 1].close > data[data.length - 2].close) {
+    if (theme == "light") {
+      priceLineColor = "rgba(30, 255, 100)"
+      priceFillColor = "rgb(144, 238, 144, 0.3)"; 
+    } else {
+      priceLineColor = "rgba(100, 255, 100)";
+      priceFillColor = "rgb(144, 238, 144, 0.2)"; 
+    }
+  } else {
+    priceLineColor = "red"
+    priceFillColor = "rgb(255, 182, 193, 0.3)";
+  }
+
   useEffect(() => {
     axios
       .get(
@@ -54,28 +72,11 @@ const LineChart = ({ symbol }: LineChartProps) => {
       });
   }, [symbol]);
 
+ 
   if (data.length === 0) {
     return <div>Loading...</div>;
   }
 
-  const axisColor = theme === "light" ? "black" : "white";
-  const xAccessor = (d: ChartData) => d.date;
-
-  let priceLineColor = "blue"
-  let priceFillColor = "rgb(173, 216, 230, 0.3)"
-  if (data.length > 1 && data[data.length - 1].close > data[data.length - 2].close) {
-    if (theme == "light") {
-      priceLineColor = "rgba(30, 255, 100)"
-      priceFillColor = "rgb(144, 238, 144, 0.3)"; 
-    } else {
-      priceLineColor = "rgba(100, 255, 100)";
-      priceFillColor = "rgb(144, 238, 144, 0.2)"; 
-    }
-  } else {
-    priceLineColor = "red"
-    priceFillColor = "rgb(255, 182, 193, 0.3)";
-  }
-  
   return (
     <div className="flex flex-col items-center justify-center px-4 py-2 w-full max-w-4xl mx-auto">
       <ChartCanvas
@@ -88,6 +89,8 @@ const LineChart = ({ symbol }: LineChartProps) => {
         xScale={scaleTime()}
         xAccessor={xAccessor}
         xExtents={[xAccessor(data[0]), xAccessor(data[data.length - 1])]}
+        disableZoom={true}
+        disablePan={true}
       >
         <Chart id={1} yExtents={(d: ChartData) => [d.close]}>
           <XAxis

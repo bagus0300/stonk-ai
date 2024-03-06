@@ -32,19 +32,19 @@ const TooltipContent = {
       x: dateFormat(xAccessor(currentItem)),
       y: [
         {
-          label: "Open",
+          label: "Open:",
           value: currentItem.open ? numberFormat(currentItem.open) : "N/A",
         },
         {
-          label: "High",
+          label: "High:",
           value: currentItem.high ? numberFormat(currentItem.high) : "N/A",
         },
         {
-          label: "Low",
+          label: "Low:",
           value: currentItem.low ? numberFormat(currentItem.low) : "N/A",
         },
         {
-          label: "Close",
+          label: "Close:",
           value: currentItem.close ? numberFormat(currentItem.close) : "N/A",
         },
       ].map((line) => ({
