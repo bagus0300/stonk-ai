@@ -3,11 +3,12 @@ import { useState, useEffect, useContext } from "react";
 
 import { Article } from "@/src/types/Article";
 import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
+import { getDateDaysBefore } from "@/src/utils/FilterUtils";
 import Card from "@/src/components/News/Card";
-import Loading from "@/src/components/Loader/Loading";
+import Loading from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
-import { getDateDaysBefore } from "@/src/utils/FilterUtils";
+import NextButton from "@/src/components/units/NextButton";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -123,7 +124,7 @@ const NewsDisplay = () => {
       <div className="mx-10">
         <div className="font-bold text-4xl sm:text-5xl mb-2">News</div>
         <div className="mt-3 text-xl">View the latest financial news</div>
-        <div className="border-b border-gray-400 mb-8 mt-8" />
+        <div className="border-b border-gray-400 mb-8 mt-6" />
         <div className="flex flex-row items-center space-x-3">
           <MultiSelectDropdown
             selectName={"Stocks"}
@@ -177,20 +178,11 @@ const NewsDisplay = () => {
                 ))}
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-10">
               {loadingMore ? (
-                <div className="mt-10">
-                  <Loading />
-                </div>
+                <Loading />
               ) : articles && articles.length != 0 ? (
-                <button
-                  className={
-                    "mt-10 border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transform hover:scale-105 font-semibold py-2 px-4 rounded inline-block transition duration-300 ease-in-out cursor-pointer"
-                  }
-                  onClick={loadNextPageArticles}
-                >
-                  Load More
-                </button>
+                <NextButton onClick={loadNextPageArticles} />
               ) : (
                 <div>No Articles Available</div>
               )}
