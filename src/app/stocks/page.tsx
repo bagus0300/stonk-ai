@@ -1,20 +1,16 @@
-import React from 'react'
-import LineChart from '@/src/components/Stocks/LineChart'
+import React from "react";
+import LineChart from "@/src/components/Stocks/LineChart";
+import TickerCard from "@/src/components/Stocks/TickerCard";
 
-// const finnhub = require('finnhub');
-
-// const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-// api_key.apiKey = ""
-// const finnhubClient = new finnhub.DefaultApi()
-
-// finnhubClient.companyProfile2({'symbol': 'AAPL'}, (error: any, data: any, response: any) => {
-//   console.log(data)
-// });
-
-const page = () => {
+const StocksPage = () => {
   return (
-    <LineChart symbol="AAPL"/>
-  )
-}
+    <>
+      <TickerCard 
+        ticker="AAPL"
+      />
+      <LineChart ticker="AAPL" />
+    </>
+  );
+};
 
-export default page
+export default StocksPage;

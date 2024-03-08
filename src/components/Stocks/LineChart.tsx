@@ -19,7 +19,7 @@ import {
 import TooltipContent from "@/src/components/Stocks/Tooltip"
 
 interface LineChartProps {
-  symbol: string;
+  ticker: string;
 }
 
 interface ChartData {
@@ -27,7 +27,7 @@ interface ChartData {
   close: number;
 }
 
-const LineChart = ({ symbol }: LineChartProps) => {
+const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
   const [data, setData] = useState<ChartData[]>([]);
   const { theme } = useTheme();
 
@@ -55,7 +55,7 @@ const LineChart = ({ symbol }: LineChartProps) => {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tinngo_stock_prices`,
         {
           params: {
-            ticker: symbol,
+            ticker: ticker,
             start_date: "2023-01-01",
             end_date: "2024-02-27",
             format: "json",
@@ -70,7 +70,7 @@ const LineChart = ({ symbol }: LineChartProps) => {
         }));
         setData(formattedData);
       });
-  }, [symbol]);
+  }, [ticker]);
 
  
   if (data.length === 0) {
@@ -84,7 +84,7 @@ const LineChart = ({ symbol }: LineChartProps) => {
         ratio={1}
         width={600}
         margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
-        seriesName={symbol}
+        seriesName={ticker}
         data={data}
         xScale={scaleTime()}
         xAccessor={xAccessor}
