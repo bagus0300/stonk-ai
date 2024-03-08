@@ -1,4 +1,5 @@
 import axios from "axios";
+import { NextResponse } from 'next/server';
 
 import { StockInfo } from "@/src/types/Stock";
 
@@ -9,9 +10,9 @@ export async function GET() {
     const stocks = response.data
       .filter((stock) => stock.type === "Common Stock")
       .sort((a, b) => a.symbol.localeCompare(b.symbol));
-    return Response.json({ stocks }, { status: 200 });
+    return new NextResponse(JSON.stringify({ stocks }), { status: 200 });
   } catch (error) {
     console.error("Error fetching stock info:", error);
-    return Response.json({ error }, { status: 500 });
+    return new NextResponse(JSON.stringify({ error }), { status: 500 });
   }
 }
