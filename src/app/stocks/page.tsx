@@ -6,16 +6,8 @@ import LineChart from "@/src/components/Stocks/LineChart";
 import TickerCard from "@/src/components/Stocks/TickerCard";
 import Loader from "@/src/components/units/Loader";
 import NextButton from "@/src/components/units/NextButton";
+import { StockInfo } from "@/src/types/Stock"
 
-interface StockInfo {
-  currency: string;
-  description: string;
-  displaySymbol: string;
-  figi: string;
-  mic: string;
-  symbol: string;
-  type: string;
-}
 
 const StocksPage = () => {
   const [stockInfo, setStockInfo] = useState<StockInfo[] | null>(null);
@@ -24,21 +16,14 @@ const StocksPage = () => {
   const PAGE_SIZE = 10
 
   useEffect(() => {
-    const url = `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${process.env.NEXT_PUBLIC_FINNHUB_KEY}`;
     axios
-      .get(url)
+      .get('/api/stocks/exchange')
       .then((response) => {
-        const commonStocks = response.data.filter(
-          (stock: StockInfo) => stock.type === "Common Stock"
-        );
-        commonStocks.sort((a: StockInfo, b: StockInfo) =>
-          a.symbol.localeCompare(b.symbol)
-        );
-        setStockInfo(commonStocks);
-        setFilteredStockInfo(commonStocks)
+        setStockInfo(response.data.stocks);
+        setFilteredStockInfo(response.data.stocks)
       })
       .catch((error) => {
-        console.error("Error fetching company profile:", error);
+        console.error("Error fetching stocks from exchange:", error);
         setStockInfo(null);
       });
   }, []);
@@ -56,7 +41,7 @@ const StocksPage = () => {
         <div className="mt-3 text-xl">View the latest prices</div>
         <div className="border-b border-gray-400 mb-8 mt-6" />
         <div className="flex flex-row items-center space-x-3"></div>
-        {filteredStockInfo ? (
+        {filteredStockInfo && Array.isArray(filteredStockInfo) ? (
           <>
             {filteredStockInfo
               .slice(0, page * PAGE_SIZE)
