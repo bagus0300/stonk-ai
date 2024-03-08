@@ -6,7 +6,7 @@ const StocksPage = () => {
   return (
     <>
       <TickerCard 
-        ticker="AAPL"
+        ticker="TSLA"
       />
       <LineChart ticker="AAPL" />
     </>
