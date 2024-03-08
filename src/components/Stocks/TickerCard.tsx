@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { finnhubClient } from "../../utils/FinnhubClient";
+import axios from 'axios';
 
 interface TickerCardProps {
   ticker: string;
@@ -20,21 +20,22 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null);
 
   useEffect(() => {
-    finnhubClient.companyProfile2( { symbol: ticker }, (error: any, data: any, response: any) => {
-        if (!error && data) {
-          setCompanyProfile(data);
-        } else {
-          console.error("Failed to fetch company profile: ", error);
-        }
-      }
-    );
+    const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${ticker}&token=${process.env.NEXT_PUBLIC_FINNHUB_KEY}`;
+    axios.get(url)
+      .then(response => {
+        setCompanyProfile(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching company profile:', error);
+        setCompanyProfile(null);
+      });
+
   }, [ticker]);
 
   return (
-    <div className="max-w-screen-lg mx-auto mt-3 mb-20">
+    <div className="max-w-screen-lg mx-auto mt-3 mb-20 cursor-pointer">
       {companyProfile ? (
-        <div 
-          className="border-md border dark:border-white rounded-lg overflow-hidden p-4 flex items-center space-x-4">
+        <div className="border-md border dark:border-white rounded-lg overflow-hidden p-4 flex items-center space-x-4">
           <img 
             src={companyProfile.logo} 
             alt={`${companyProfile.name} logo`} 

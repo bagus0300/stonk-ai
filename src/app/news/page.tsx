@@ -70,10 +70,7 @@ const NewsDisplay = () => {
         end_date: endDate,
       });
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles?${queryParams}`
-      );
-
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles?${queryParams}`);
       setPage((prev) => prev + 1);
 
       if (response.ok) {
