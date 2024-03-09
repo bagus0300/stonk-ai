@@ -36,16 +36,20 @@ const TooltipContent = {
           value: currentItem.open ? numberFormat(currentItem.open) : "N/A",
         },
         {
-          label: "High:",
-          value: currentItem.high ? numberFormat(currentItem.high) : "N/A",
+          label: "Close:",
+          value: currentItem.close ? numberFormat(currentItem.close) : "N/A",
         },
         {
           label: "Low:",
           value: currentItem.low ? numberFormat(currentItem.low) : "N/A",
         },
         {
-          label: "Close:",
-          value: currentItem.close ? numberFormat(currentItem.close) : "N/A",
+          label: "High:",
+          value: currentItem.high ? numberFormat(currentItem.high) : "N/A",
+        },
+        {
+          label: "Volume:",
+          value: currentItem.volume ? numberFormat(currentItem.volume) : "N/A",
         },
       ].map((line) => ({
         ...line,

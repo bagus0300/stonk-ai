@@ -54,14 +54,30 @@ const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
   }
 
   useEffect(() => {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setFullYear(endDate.getFullYear() - 1);
+
+    const formatDate = (date: Date) => {
+      let d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+      return [year, month, day].join('-');
+    };
+
     axios
       .get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tinngo_stock_prices`,
         {
           params: {
             ticker: ticker,
-            start_date: "2023-01-01",
-            end_date: "2024-02-27",
+            start_date: formatDate(startDate),
+            end_date: formatDate(endDate),
             format: "json",
             resampleFreq: "monthly",
           },
@@ -70,7 +86,11 @@ const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
       .then((res) => {
         const formattedData = res.data.map((d: any) => ({
           date: new Date(d.date),
+          open: +d.open,
           close: +d.close,
+          low: +d.low,
+          high: +d.high,
+          volume: +d.adjVolume,
         }));
         setData(formattedData);
       });
