@@ -16,7 +16,8 @@ import {
   HoverTooltip,
 } from "react-financial-charts";
 
-import TooltipContent from "@/src/components/Stocks/Tooltip"
+import TooltipContent from "@/src/components/Stocks/Tooltip";
+import Loader from "@/src/components/units/Loader";
 
 interface LineChartProps {
   ticker: string;
@@ -34,18 +35,21 @@ const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
   const axisColor = theme === "light" ? "black" : "white";
   const xAccessor = (d: ChartData) => d.date;
 
-  let priceLineColor = "blue"
-  let priceFillColor = "rgb(173, 216, 230, 0.3)"
-  if (data.length > 1 && data[data.length - 1].close > data[data.length - 2].close) {
+  let priceLineColor = "blue";
+  let priceFillColor = "rgb(173, 216, 230, 0.3)";
+  if (
+    data.length > 1 &&
+    data[data.length - 1].close > data[data.length - 2].close
+  ) {
     if (theme == "light") {
-      priceLineColor = "rgba(30, 255, 100)"
-      priceFillColor = "rgb(144, 238, 144, 0.3)"; 
+      priceLineColor = "rgba(30, 255, 100)";
+      priceFillColor = "rgb(144, 238, 144, 0.3)";
     } else {
       priceLineColor = "rgba(100, 255, 100)";
-      priceFillColor = "rgb(144, 238, 144, 0.2)"; 
+      priceFillColor = "rgb(144, 238, 144, 0.2)";
     }
   } else {
-    priceLineColor = "red"
+    priceLineColor = "red";
     priceFillColor = "rgb(255, 182, 193, 0.3)";
   }
 
@@ -72,12 +76,11 @@ const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
       });
   }, [ticker]);
 
- 
-  if (data.length === 0) {
-    return <div>Loading...</div>;
-  }
-
-  return (
+  return data.length === 0 ? (
+    <div className="flex justify-center items-center h-full">
+      <Loader />
+    </div>
+  ) : (
     <div className="flex flex-col items-center justify-center px-4 py-2 w-full max-w-4xl mx-auto">
       <ChartCanvas
         height={400}
@@ -129,16 +132,14 @@ const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
             orient="right"
             displayFormat={format(".2f")}
           />
-          <HoverTooltip 
+          <HoverTooltip
             yAccessor={(d) => d.close}
             tooltip={TooltipContent}
             chartId={1}
             fontSize={15}
           />
         </Chart>
-        <CrossHairCursor 
-          strokeStyle={axisColor}
-        />
+        <CrossHairCursor strokeStyle={axisColor} />
       </ChartCanvas>
     </div>
   );

@@ -5,7 +5,7 @@ import { Article } from "@/src/types/Article";
 import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
 import { getDateDaysBefore } from "@/src/utils/FilterUtils";
 import Card from "@/src/components/News/Card";
-import Loading from "@/src/components/units/Loader";
+import Loader from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
 import NextButton from "@/src/components/units/NextButton";
@@ -155,7 +155,7 @@ const NewsDisplay = () => {
 
         {loading ? (
           <div className="fixed top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-            <Loading />
+            <Loader />
           </div>
         ) : (
           <>
@@ -180,7 +180,7 @@ const NewsDisplay = () => {
 
             <div className="flex justify-center mt-10">
               {loadingMore ? (
-                <Loading />
+                <Loader />
               ) : articles && articles.length != 0 ? (
                 <NextButton onClick={loadNextPageArticles} />
               ) : (
