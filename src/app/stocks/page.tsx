@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Head from 'next/head';
 
 import TickerCard from "@/src/components/Stocks/TickerCard";
 import Loader from "@/src/components/units/Loader";

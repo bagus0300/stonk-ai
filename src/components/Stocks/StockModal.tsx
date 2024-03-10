@@ -16,6 +16,11 @@ const StockModal: React.FC<StockModalProps> = ({
   handleClose,
 }) => {
   const { theme } = useTheme();
+  const [selectedRange, setSelectedRange] = useState('1W');
+
+  const handleRangeChange = (range: string) => {
+    setSelectedRange(range);
+  };
 
   return (
     <Modal
@@ -40,9 +45,22 @@ const StockModal: React.FC<StockModalProps> = ({
               X<span className="sr-only">Close modal</span>
             </button>
           </div>
-          <div className="">
-            <LineChart ticker={ticker} />
+          <div className="flex justify-around p-4">
+            {['1W', '1M', '3M', '6M', 'YTD', '1 Y', '2Y', '5Y'].map((range) => (
+              <button
+                key={range}
+                className={`relative overflow-hidden py-2 px-4 rounded-lg ${selectedRange === range ? 'bg-gray-600 text-white' : 'bg-transparent'} group`}
+                onClick={() => handleRangeChange(range)}
+              >
+                {range}
+                <span 
+                  className="absolute bottom-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"
+                  style={{ backgroundColor: theme === "light" ? "black" : "white" }}
+                />            
+              </button>
+            ))}
           </div>
+          <LineChart ticker={ticker} />
         </div>
       </div>
     </Modal>
