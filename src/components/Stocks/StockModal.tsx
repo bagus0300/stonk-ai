@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useTheme } from "next-themes";
 
@@ -16,7 +16,65 @@ const StockModal: React.FC<StockModalProps> = ({
   handleClose,
 }) => {
   const { theme } = useTheme();
-  const [selectedRange, setSelectedRange] = useState('1W');
+  const [selectedRange, setSelectedRange] = useState('YTD');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  useEffect(() => {
+    const calculateStartDate = (range: string) => {
+      const today = new Date();
+      let start = new Date();
+  
+      switch(range) {
+        case '1W':
+          start.setDate(today.getDate() - 7);
+          break;
+        case '1M':
+          start.setMonth(today.getMonth() - 1);
+          break;
+        case '3M':
+          start.setMonth(today.getMonth() - 3);
+          break;
+        case '6M':
+          start.setMonth(today.getMonth() - 6);
+          break;
+        case 'YTD':
+          start = new Date(today.getFullYear(), 0, 1);
+          break;
+        case '1Y':
+          start.setFullYear(today.getFullYear() - 1);
+          break;
+        case '2Y':
+          start.setFullYear(today.getFullYear() - 2);
+          break;
+        case '5Y':
+          start.setFullYear(today.getFullYear() - 5);
+          break;
+        default:
+          start.setDate(today.getDate() - 7);
+      }
+      setStartDate(start);
+    };
+
+    calculateStartDate(selectedRange);
+  }, [selectedRange]);
+
+
+  useEffect(() => {
+    const calculateEndDate = () => {
+      const today = new Date(); 
+      const dayOfWeek = today.getDay(); 
+    
+      if (dayOfWeek === 0) {
+        today.setDate(today.getDate() - 2);
+      } else if (dayOfWeek === 6) {
+        today.setDate(today.getDate() - 1);
+      }
+  
+      return today;
+    };
+    setEndDate(calculateEndDate());
+  }, []);
 
   const handleRangeChange = (range: string) => {
     setSelectedRange(range);
@@ -53,14 +111,20 @@ const StockModal: React.FC<StockModalProps> = ({
                 onClick={() => handleRangeChange(range)}
               >
                 {range}
-                <span 
-                  className="absolute bottom-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"
-                  style={{ backgroundColor: theme === "light" ? "black" : "white" }}
-                />            
+                {selectedRange != range && (
+                  <span 
+                    className="absolute bottom-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"
+                    style={{ backgroundColor: theme === "light" ? "black" : "white" }}
+                  />  
+                )}
               </button>
             ))}
           </div>
-          <LineChart ticker={ticker} />
+          <LineChart 
+            ticker={ticker}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </div>
       </div>
     </Modal>

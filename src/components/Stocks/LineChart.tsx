@@ -21,6 +21,8 @@ import Loader from "@/src/components/units/Loader";
 
 interface LineChartProps {
   ticker: string;
+  startDate: Date;
+  endDate: Date;
 }
 
 interface ChartData {
@@ -28,7 +30,7 @@ interface ChartData {
   close: number;
 }
 
-const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
+const LineChart: React.FC<LineChartProps> = ({ ticker, startDate, endDate }) => {
   const [data, setData] = useState<ChartData[]>([]);
   const { theme } = useTheme();
 
@@ -54,10 +56,6 @@ const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
   }
 
   useEffect(() => {
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setFullYear(endDate.getFullYear() - 1);
-
     const formatDate = (date: Date) => {
       let d = new Date(date),
           month = '' + (d.getMonth() + 1),
@@ -94,7 +92,7 @@ const LineChart: React.FC<LineChartProps> = ({ ticker }) => {
         }));
         setData(formattedData);
       });
-  }, [ticker]);
+  }, [ticker, startDate, endDate]);
 
   return data.length === 0 ? (
     <div className="flex justify-center items-center h-full">
