@@ -104,7 +104,7 @@ const StockModal: React.FC<StockModalProps> = ({
             </button>
           </div>
           <div className="flex justify-around p-4">
-            {['1W', '1M', '3M', '6M', 'YTD', '1 Y', '2Y', '5Y'].map((range) => (
+            {['1W', '1M', '3M', '6M', 'YTD', '1Y', '2Y', '5Y'].map((range) => (
               <button
                 key={range}
                 className={`relative overflow-hidden py-2 px-4 rounded-lg ${selectedRange === range ? 'bg-gray-600 text-white' : 'bg-transparent'} group`}
