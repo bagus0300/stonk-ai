@@ -32,7 +32,7 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto mt-10 mb-10 cursor-pointer">
+    <div className="max-w-screen-lg mx-auto mt-10 mb-10 cursor-pointer transition-transform duration-300 ease-in-out transform hover:scale-105">
       {companyProfile && (
         <div className="border-md border dark:border-white rounded-lg overflow-hidden p-4 flex items-center space-x-4">
           <img

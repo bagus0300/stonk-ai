@@ -17,6 +17,7 @@ const StocksPage = () => {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [currTicker, setCurrTicker] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const PAGE_SIZE = 10;
 
   useEffect(() => {
@@ -54,8 +55,10 @@ const StocksPage = () => {
   };
 
   const loadNextPageStocks = () => {
+    setIsLoading(true)
     setTimeout(() => {
       setPage((prevPage) => prevPage + 1);
+      setIsLoading(false)
     }, 2000);
   };
 
@@ -85,7 +88,6 @@ const StocksPage = () => {
             handleSubmit={getFilteredTickers}
           />
           </div>
-
           {filteredStockInfo && Array.isArray(filteredStockInfo) ? (
             <>
               {filteredStockInfo && Array.isArray(filteredStockInfo) ? (
@@ -97,17 +99,21 @@ const StocksPage = () => {
                   ))}
                 </>
               ) : null}
-
-              <div className="flex justify-center">
-                <NextButton onClick={loadNextPageStocks} />
-              </div>
             </>
           ) : (
             <div className="fixed top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
               <Loader />
             </div>
           )}
-          
+        </div>
+        <div className="flex justify-center mt-10">
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="flex justify-center">
+              <NextButton onClick={loadNextPageStocks} />
+            </div>
+          )}
         </div>
       </div>
       <StockModal 
