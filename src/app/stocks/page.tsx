@@ -1,17 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Head from 'next/head';
 
 import TickerCard from "@/src/components/Stocks/TickerCard";
 import Loader from "@/src/components/units/Loader";
 import NextButton from "@/src/components/units/NextButton";
 import StockModal from "@/src/components/Stocks/StockModal";
 import { StockInfo } from "@/src/types/Stock";
+import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 
 const StocksPage = () => {
   const [stockInfo, setStockInfo] = useState<StockInfo[] | null>(null);
   const [filteredStockInfo, setFilteredStockInfo] = useState<StockInfo[] | null>(null);
+  const [tickerOptions, setTickerOptions] = useState<string[]>([]);
+  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [currTicker, setCurrTicker] = useState("")
@@ -19,7 +21,7 @@ const StocksPage = () => {
 
   useEffect(() => {
     axios
-      .get("/api/stocks/exchange")
+      .get("/api/stock/exchange")
       .then((response) => {
         setStockInfo(response.data.stocks);
         setFilteredStockInfo(response.data.stocks);
@@ -29,6 +31,27 @@ const StocksPage = () => {
         setStockInfo(null);
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/stock/ticker")
+      .then((response) => {
+        setTickerOptions(response.data.tickers);
+      })
+      .catch((error) => {
+        console.error("Error fetching tickers: ", error);
+      });
+  }, []);
+
+  const getFilteredTickers = async () => {
+    if (!stockInfo) return;
+
+    const filtered = stockInfo.filter(stock =>
+      selectedTickers.includes(stock.symbol)
+    );
+  
+    setFilteredStockInfo(filtered);
+  };
 
   const loadNextPageStocks = () => {
     setTimeout(() => {
@@ -52,7 +75,17 @@ const StocksPage = () => {
           <div className="font-bold text-4xl sm:text-5xl mb-2">Stocks</div>
           <div className="mt-3 text-xl">View the latest prices</div>
           <div className="border-b border-gray-400 mb-8 mt-6" />
-          <div className="flex flex-row items-center space-x-3"></div>
+          <div className="flex flex-row items-center space-x-3">
+
+          <MultiSelectDropdown
+            selectName={"Stocks"}
+            originalOptions={tickerOptions}
+            selectedOptions={selectedTickers}
+            setSelectedOptions={setSelectedTickers}
+            handleSubmit={getFilteredTickers}
+          />
+          </div>
+
           {filteredStockInfo && Array.isArray(filteredStockInfo) ? (
             <>
               {filteredStockInfo && Array.isArray(filteredStockInfo) ? (

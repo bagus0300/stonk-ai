@@ -16,7 +16,7 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`/api/stocks/company_profile/?ticker=${ticker}`)
+      .get(`/api/stock/company_profile/?ticker=${ticker}`)
       .then((response) => {
         setCompanyProfile(response.data.company_profile);
       })
@@ -32,7 +32,7 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto mt-3 mb-20 cursor-pointer">
+    <div className="max-w-screen-lg mx-auto mt-10 mb-10 cursor-pointer">
       {companyProfile && (
         <div className="border-md border dark:border-white rounded-lg overflow-hidden p-4 flex items-center space-x-4">
           <img

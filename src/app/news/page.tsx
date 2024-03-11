@@ -9,6 +9,7 @@ import Loader from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
 import NextButton from "@/src/components/units/NextButton";
+import axios from "axios";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -83,20 +84,6 @@ const NewsDisplay = () => {
     }
   };
 
-  const getTickers = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tickers`
-      );
-      const tickers = await response.json();
-      if (Array.isArray(tickers)) {
-        setTickerOptions(tickers);
-      }
-    } catch (error) {
-      console.log("Error fetching tickers: ", error);
-    }
-  };
-
   const getNewlyFilteredArticles = async () => {
     setLoading(true);
     const data = await loadArticles(0);
@@ -116,7 +103,14 @@ const NewsDisplay = () => {
   }, [selectedSentiment, selectedPriceAction, searchQuery, selectedDateRange]);
 
   useEffect(() => {
-    getTickers();
+    axios
+      .get("/api/stock/ticker")
+      .then((response) => {
+        setTickerOptions(response.data.tickers);
+      })
+      .catch((error) => {
+        console.error("Error fetching tickers: ", error);
+      });
   }, []);
 
   return (
