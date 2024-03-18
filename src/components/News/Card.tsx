@@ -1,6 +1,8 @@
 import React from "react";
 import { Article } from "@/src/types/Article";
 
+import { getPriceDifference, getPriceAction } from "@/src/utils/FilterUtils"
+
 const Card: React.FC<Article> = ({
   title,
   publication_datetime,
@@ -20,13 +22,7 @@ const Card: React.FC<Article> = ({
     return text.slice(0, maxLength) + "...";
   };
 
-  const getDifference = (openPrice: number, closePrice: number) => {
-    return (closePrice - openPrice).toFixed(2);
-  };
-
-  const getPriceAction = (openPrice: number, closePrice: number) => {
-    return (((closePrice - openPrice) / closePrice) * 100).toFixed(2);
-  };
+  
 
   return (
     <div className="flex-shrink-0 shadow-md border dark:border-white rounded-lg overflow-hidden flex p-4">
@@ -73,7 +69,7 @@ const Card: React.FC<Article> = ({
                 : open_price > close_price
                 ? "▼"
                 : ""}
-              {getDifference(open_price, close_price)} (
+              {getPriceDifference(open_price, close_price)} (
               {getPriceAction(open_price, close_price)}%)
             </p>
           </div>

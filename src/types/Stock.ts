@@ -17,3 +17,12 @@ export interface CompanyProfile {
   weburl: string;
   logo: string;
 }
+
+export interface QuoteInfo {
+  c: number;
+  h: number;
+  l: number;
+  o: number;
+  pc: number;
+  t: number;
+}

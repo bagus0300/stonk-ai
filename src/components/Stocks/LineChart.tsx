@@ -68,9 +68,6 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, startDate, endDate }) => 
       return [year, month, day].join('-');
     };
 
-    console.log(formatDate(startDate))
-    console.log(formatDate(endDate))
-
     axios
       .get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tinngo_stock_prices`,

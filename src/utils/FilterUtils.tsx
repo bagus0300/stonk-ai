@@ -15,3 +15,12 @@ export const convertDatetimeToString = (datetime: Date) => {
 
   return `${year}-${formattedMonth}-${formattedDay}`;
 }
+
+export const getPriceDifference = (openPrice: number, closePrice: number) => {
+  const difference = closePrice - openPrice;
+  return difference >= 0 ? `+${difference.toFixed(2)}` : difference.toFixed(2);
+};
+
+export const getPriceAction = (openPrice: number, closePrice: number) => {
+  return (((closePrice - openPrice) / closePrice) * 100).toFixed(2);
+};
