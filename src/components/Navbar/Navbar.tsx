@@ -11,7 +11,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedNavLink, setSelectedNavLink] = useState("News");
   const [results, setResults] = useState("");
-  const { updateSearchQuery, updateCategory } = useContext(
+  const { updateSearchQuery } = useContext(
     SearchContext
   ) as SearchContextProps;
 
@@ -21,7 +21,6 @@ const Navbar = () => {
 
   useEffect(() => {
     updateSearchQuery(results);
-    updateCategory(selectedNavLink);
   }, [results, selectedNavLink]);
 
   return (

@@ -16,7 +16,7 @@ const NewsDisplay = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const { searchQuery, category } = useContext(SearchContext) as SearchContextProps;
+  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
 
   const [tickerOptions, setTickerOptions] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
