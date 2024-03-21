@@ -58,17 +58,9 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
             className="w-12 h-12"
           />
           <div className="flex-grow">
-            <p className="text-sm">
-              {companyProfile.ticker} -{" "}
-              <a
-                href={companyProfile.weburl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {companyProfile.name}
-              </a>{" "}
-              - {companyProfile.exchange}
-            </p>
+          <p className="text-sm">
+            {companyProfile.ticker} - {companyProfile.name} - {companyProfile.exchange}
+          </p>
           </div>
           {quoteInfo && (
             <div className="flex flex-col items-center text-sm p-2 font-bold">
