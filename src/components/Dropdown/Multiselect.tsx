@@ -37,6 +37,11 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     }
   };
 
+  const handleSubmitClick = () => {
+    handleSubmit()
+    handleToggleDropdown()
+  }
+
   return (
     <div className="w-1/4 relative">
       <div
@@ -85,7 +90,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               </div>
             ))}
           </div>
-          <button className="text-black" onClick={handleSubmit}>
+          <button className="text-black" onClick={handleSubmitClick}>
             Submit
           </button>
         </div>

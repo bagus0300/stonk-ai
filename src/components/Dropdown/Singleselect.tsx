@@ -26,6 +26,7 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
     } else {
       setSelectedOption(key);
     }
+    handleToggleDropdown()
   };
 
   return (
