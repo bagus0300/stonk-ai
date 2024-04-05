@@ -22,8 +22,6 @@ const Card: React.FC<Article> = ({
     return text.slice(0, maxLength) + "...";
   };
 
-  
-
   return (
     <div className="flex-shrink-0 shadow-md border dark:border-white rounded-lg overflow-hidden flex p-4">
       <div className="w-full p-4">

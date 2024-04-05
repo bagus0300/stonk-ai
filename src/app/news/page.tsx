@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
+import axios from "axios";
 
 import { Article } from "@/src/types/Article";
 import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
@@ -9,7 +10,6 @@ import Loader from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
 import NextButton from "@/src/components/units/NextButton";
-import axios from "axios";
 
 const NewsDisplay = () => {
   const [articles, setArticles] = useState<Article[]>([]);
