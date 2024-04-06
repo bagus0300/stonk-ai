@@ -48,7 +48,7 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
             <div key={key} className="flex items-center">
               <div
                 onClick={() => handleOptionSelect(key)}
-                className={`w-4 h-4 ml-2 flex-shrink-0 hover:cursor-pointer rounded-full border border-neutral-300 ${
+                className={`w-4 h-4 ml-2 flex-shrink-0 hover:cursor-pointer rounded-full border border-black ${
                   selectedOption === key ? "bg-blue-400" : ""
                 }`}
               />
