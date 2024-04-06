@@ -64,11 +64,14 @@ const StocksPage = () => {
   const getFilteredTickers = async () => {
     if (!stockInfo) return;
 
-    const filtered = stockInfo.filter(stock =>
-      selectedTickers.includes(stock.symbol)
-    );
-  
-    setFilteredStockInfo(filtered);
+    if (!selectedTickers || selectedTickers.length === 0) {
+      setFilteredStockInfo(stockInfo)
+    } else {
+      const filtered = stockInfo.filter(stock =>
+        selectedTickers.includes(stock.symbol)
+      );
+      setFilteredStockInfo(filtered);
+    }
   };
 
   const loadNextPageStocks = () => {
