@@ -49,7 +49,7 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
               <div
                 onClick={() => handleOptionSelect(key)}
                 className={`w-4 h-4 ml-2 flex-shrink-0 hover:cursor-pointer rounded-full border border-black ${
-                  selectedOption === key ? "bg-blue-400" : ""
+                  selectedOption === key ? "bg-black" : ""
                 }`}
               />
               <label
