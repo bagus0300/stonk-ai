@@ -1,7 +1,9 @@
-import React from "react";
-import { Article } from "@/src/types/Article";
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-import { getPriceDifference, getPriceAction } from "@/src/utils/FilterUtils"
+import { Article } from "@/src/types/Article";
+import { getPriceDifference, getPriceAction } from "@/src/utils/FilterUtils";
 
 const Card: React.FC<Article> = ({
   title,
@@ -15,12 +17,45 @@ const Card: React.FC<Article> = ({
   open_price,
   close_price,
 }) => {
+  const [sentimentOptions, setSentimentOptions] = useState({
+    Positive: new Set(),
+    Negative: new Set(),
+    Neutral: new Set(),
+  });
+
   const truncateSummary = (text: string, maxLength: number) => {
     if (text.length <= maxLength) {
       return text;
     }
     return text.slice(0, maxLength) + "...";
   };
+
+  const getSentimentColorClass = (sentiment: string) => {
+    if (sentimentOptions.Positive.has(sentiment)) return "text-green-500";
+    if (sentimentOptions.Negative.has(sentiment)) return "text-red-500";
+    return "";
+  };
+
+  useEffect(() => {
+    const fetchSentiments = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/article/sentiments`
+        );
+        if (response.data && response.status === 200) {
+          setSentimentOptions({
+            Positive: new Set(response.data.Positive),
+            Negative: new Set(response.data.Negative),
+            Neutral: new Set(response.data.Neutral),
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching sentiment options:", error);
+      }
+    };
+
+    fetchSentiments();
+  }, []);
 
   return (
     <div className="flex-shrink-0 shadow-md border dark:border-white rounded-lg overflow-hidden flex p-4">
@@ -35,20 +70,16 @@ const Card: React.FC<Article> = ({
         <div className="flex flex-row space-x-4">
           <p className="text-red-400 text-xl font-bold mb-2">{ticker}</p>
           <p
-            className={`text-xl font-semibold ${
-              sentiment === "Positive"
-                ? "text-green-500"
-                : sentiment === "Negative"
-                ? "text-red-500"
-                : ""
-            }`}
+            className={`text-xl font-semibold ${getSentimentColorClass(sentiment)}`}
           >
             {sentiment}
           </p>
         </div>
         <p>{truncateSummary(summary, 300)}</p>
 
-        <h1 className="italic mt-4 text-lg mb-2">Price Action On: {market_date}</h1>
+        <h1 className="italic mt-4 text-lg mb-2">
+          Price Action On: {market_date}
+        </h1>
         {open_price ? (
           <div className="flex flex-row space-x-4">
             <p>O: {open_price}</p>
