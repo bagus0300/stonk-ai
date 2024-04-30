@@ -3,10 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import { Article } from "@/src/types/Article";
-import {
-  SearchContext,
-  SearchContextProps,
-} from "@/src/contexts/SearchContext";
+import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
 import { getDateDaysBefore } from "@/src/utils/FilterUtils";
 import Card from "@/src/components/News/Card";
 import Loader from "@/src/components/units/Loader";
@@ -53,36 +50,33 @@ const NewsDisplay = () => {
 
   const loadArticles = async (curr_page: number) => {
     try {
-      const sentiment =
-        selectedSentiment != null
+      const sentiment = selectedSentiment != null
           ? sentimentOptions.get(selectedSentiment) || ""
           : "";
-      const priceAction =
-        selectedPriceAction != null
+      const priceAction = selectedPriceAction != null
           ? priceActionOptions.get(selectedPriceAction) || ""
           : "";
-      const dateRange =
-        selectedDateRange != null ? dateRanges.get(selectedDateRange) : null;
+      const dateRange = selectedDateRange != null 
+          ? dateRanges.get(selectedDateRange) 
+          : null;
       const startDate = dateRange ? dateRange[0] : "";
       const endDate = dateRange ? dateRange[1] : "";
 
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/article`,
-        {
-          params: {
-            page: curr_page.toString(),
-            search_query: searchQuery || "",
-            tickers: selectedTickers.join(","),
-            sentiment: sentiment,
-            price_action: priceAction,
-            start_date: startDate,
-            end_date: endDate,
-          },
-        }
-      );
+      const queryParams = new URLSearchParams({
+        page: curr_page.toString(),
+        search_query: searchQuery || "",
+        tickers: selectedTickers.join(","),
+        sentiment: sentiment,
+        price_action: priceAction,
+        start_date: startDate,
+        end_date: endDate,
+      });
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/article?${queryParams}`);
       setPage((prev) => prev + 1);
-      if (response.status === 200) {
-        return response.data;
+
+      if (response.ok) {
+        return await response.json();
       }
       return [];
     } catch (error) {
