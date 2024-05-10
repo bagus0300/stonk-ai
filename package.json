@@ -26,6 +26,7 @@
     "eslint-config-next": "13.4.4",
     "finnhub": "^1.2.18",
     "install": "^0.13.0",
+    "ip": ">=2.0.1",
     "next": "^14.2.3",
     "next-themes": "^0.2.1",
     "npm": "^10.2.5",
