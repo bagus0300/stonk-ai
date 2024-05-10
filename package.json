@@ -20,6 +20,7 @@
     "concurrently": "^8.0.1",
     "d3-format": "^3.1.0",
     "d3-time-format": "^4.1.0",
+    "d3-color": "^3.1.0",
     "dotenv": "^16.3.1",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
