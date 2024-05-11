@@ -15,6 +15,7 @@ import {
   AreaSeries,
   HoverTooltip,
 } from "react-financial-charts";
+import dayjs from 'dayjs'
 
 import TooltipContent from "@/src/components/Stocks/Tooltip";
 import Loader from "@/src/components/units/Loader";
@@ -57,15 +58,7 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, startDate, endDate }) => 
 
   useEffect(() => {
     const formatDate = (date: Date) => {
-      let d = new Date(date),
-          month = '' + (d.getMonth() + 1),
-          day = '' + d.getDate(),
-          year = d.getFullYear();
-
-      if (month.length < 2) month = '0' + month;
-      if (day.length < 2) day = '0' + day;
-
-      return [year, month, day].join('-');
+      return dayjs(date).format("YYYY-MM-DD")
     };
 
     axios
