@@ -8,11 +8,16 @@ import NextButton from "@/src/components/units/NextButton";
 import StockModal from "@/src/components/Stocks/StockModal";
 import { StockInfo } from "@/src/types/Stock";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
-import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
+import {
+  SearchContext,
+  SearchContextProps,
+} from "@/src/contexts/SearchContext";
 
 const StocksPage = () => {
   const [stockInfo, setStockInfo] = useState<StockInfo[] | null>(null);
-  const [filteredStockInfo, setFilteredStockInfo] = useState<StockInfo[] | null>(null);
+  const [filteredStockInfo, setFilteredStockInfo] = useState<
+    StockInfo[] | null
+  >(null);
   const [tickerOptions, setTickerOptions] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const [page, setPage] = useState(1);
@@ -23,51 +28,58 @@ const StocksPage = () => {
   const PAGE_SIZE = 10;
 
   useEffect(() => {
-    axios
-      .get("/api/stock/exchange")
-      .then((response) => {
+    const fetchStockExchange = async () => {
+      try {
+        const response = await axios.get("/api/stock/exchange");
         setStockInfo(response.data.stocks);
         setFilteredStockInfo(response.data.stocks);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching stocks from exchange:", error);
         setStockInfo(null);
-      });
+      }
+    };
+
+    fetchStockExchange();
   }, []);
 
   useEffect(() => {
-    axios
-      .get("/api/stock/ticker")
-      .then((response) => {
+    const fetchStockTicker = async () => {
+      try {
+        const response = await axios.get("/api/stock/ticker");
         setTickerOptions(response.data.tickers);
-      })
-      .catch((error) => {
-        console.error("Error fetching tickers: ", error);
-      });
+      } catch (error) {
+        console.error("Error fetching tickers:", error);
+      }
+    };
+
+    fetchStockTicker();
   }, []);
 
   useEffect(() => {
     if (!stockInfo) return;
     setIsLoading(true);
-    const searchTerms = searchQuery.split(' ');
-    const filtered = stockInfo.filter(stock =>
-      searchTerms.some(term => 
-        stock.displaySymbol.toLowerCase().includes(term) ||
-        stock.description.toLowerCase().split(' ').some(descWord => descWord.includes(term))
+    const searchTerms = searchQuery.split(" ");
+    const filtered = stockInfo.filter((stock) =>
+      searchTerms.some(
+        (term) =>
+          stock.displaySymbol.toLowerCase().includes(term) ||
+          stock.description
+            .toLowerCase()
+            .split(" ")
+            .some((descWord) => descWord.includes(term))
       )
     );
     setFilteredStockInfo(filtered);
     setIsLoading(false);
-
-  }, [searchQuery])
+  }, [searchQuery]);
 
   const getFilteredTickers = async () => {
     if (!stockInfo) return;
 
     if (!selectedTickers || selectedTickers.length === 0) {
-      setFilteredStockInfo(stockInfo)
+      setFilteredStockInfo(stockInfo);
     } else {
-      const filtered = stockInfo.filter(stock =>
+      const filtered = stockInfo.filter((stock) =>
         selectedTickers.includes(stock.symbol)
       );
       setFilteredStockInfo(filtered);
@@ -89,14 +101,16 @@ const StocksPage = () => {
 
   const handleCloseModal = () => {
     setIsOpen(false);
-  }
+  };
 
   return (
     <>
       <div className="max-w-screen-lg mx-auto mt-3 mb-20">
         <div className="mx-10">
           <div className="font-bold text-4xl sm:text-5xl mb-2">Stocks</div>
-          <div className="mt-3 text-xl">View the latest prices for 15,000+ stocks</div>
+          <div className="mt-3 text-xl">
+            View the latest prices for 15,000+ stocks
+          </div>
           <div className="border-b border-gray-400 mb-8 mt-6" />
           <div className="flex flex-row items-center space-x-3">
             <MultiSelectDropdown
@@ -112,7 +126,10 @@ const StocksPage = () => {
               {filteredStockInfo && Array.isArray(filteredStockInfo) ? (
                 <>
                   {filteredStockInfo.slice(0, page * PAGE_SIZE).map((stock) => (
-                    <div key={stock.symbol} onClick={() => handleOpenModal(stock.symbol)}>
+                    <div
+                      key={stock.symbol}
+                      onClick={() => handleOpenModal(stock.symbol)}
+                    >
                       <TickerCard ticker={stock.symbol} />
                     </div>
                   ))}
@@ -135,8 +152,8 @@ const StocksPage = () => {
           )}
         </div>
       </div>
-      <StockModal 
-        isOpen={isOpen} 
+      <StockModal
+        isOpen={isOpen}
         ticker={currTicker}
         handleClose={handleCloseModal}
       />
