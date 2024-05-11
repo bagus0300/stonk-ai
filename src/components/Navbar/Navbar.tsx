@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
-import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
+import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
 import NavLink from "@/src/components/Navbar/NavLink";
 import SearchBar from "@/src/components/Navbar/SearchBar";
 import ThemeToggle from "@/src/components/Navbar/ThemeToggle";

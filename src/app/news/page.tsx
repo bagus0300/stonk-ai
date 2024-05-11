@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import { Article } from "@/src/types/Article";
-import { SearchContext, SearchContextProps } from "@/src/contexts/SearchContext";
+import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
 import { getDateDaysBefore } from "@/src/utils/FilterUtils";
 import Card from "@/src/components/News/Card";
 import Loader from "@/src/components/units/Loader";

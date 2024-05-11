@@ -11,7 +11,7 @@ import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 import {
   SearchContext,
   SearchContextProps,
-} from "@/src/contexts/SearchContext";
+} from "@/src/providers/SearchProvider";
 
 const StocksPage = () => {
   const [stockInfo, setStockInfo] = useState<StockInfo[] | null>(null);

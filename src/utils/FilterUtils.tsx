@@ -1,7 +1,7 @@
 export const getDateDaysBefore = (days_duration: number) => {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days_duration);
-  return convertDatetimeToString(startDate)
+  return convertDatetimeToString(startDate);
 };
 
 export const convertDatetimeToString = (datetime: Date) => {
@@ -14,7 +14,7 @@ export const convertDatetimeToString = (datetime: Date) => {
   const formattedDay = day < 10 ? `0${day}` : `${day}`;
 
   return `${year}-${formattedMonth}-${formattedDay}`;
-}
+};
 
 export const getPriceDifference = (openPrice: number, closePrice: number) => {
   const difference = closePrice - openPrice;

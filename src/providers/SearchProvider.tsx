@@ -20,9 +20,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <SearchContext.Provider
-      value={{ searchQuery, updateSearchQuery }}
-    >
+    <SearchContext.Provider value={{ searchQuery, updateSearchQuery }}>
       {children}
     </SearchContext.Provider>
   );
