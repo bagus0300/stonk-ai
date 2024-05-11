@@ -1,8 +1,4 @@
-import NewsDisplay from "@/src/app/news/page";
-
-export const metadata = {
-  title: "Sentiment News",
-};
+import NewsDisplay from "@/src/components/News/NewsPage";
 
 export default function Home() {
   return <NewsDisplay />;

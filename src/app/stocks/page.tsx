@@ -1,9 +1,5 @@
-import StocksPage from "@/src/app/news/page";
+import StocksPage from "@/src/components/Stocks/StockPage";
 
-export const metadata = {
-  title: "Stocks",
-};
-
-export default function Home() {
+export default function Stocks() {
   return <StocksPage />;
 }
