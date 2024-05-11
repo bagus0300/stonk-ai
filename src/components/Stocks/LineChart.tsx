@@ -15,7 +15,7 @@ import {
   AreaSeries,
   HoverTooltip,
 } from "react-financial-charts";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 
 import TooltipContent from "@/src/components/Stocks/Tooltip";
 import Loader from "@/src/components/units/Loader";
@@ -31,51 +31,43 @@ interface ChartData {
   close: number;
 }
 
-const LineChart: React.FC<LineChartProps> = ({ ticker, startDate, endDate }) => {
-  const [data, setData] = useState<ChartData[]>([]);
+const LineChart: React.FC<LineChartProps> = ({
+  ticker,
+  startDate,
+  endDate,
+}) => {
   const { theme } = useTheme();
-
-  const axisColor = theme === "light" ? "black" : "white";
-  const xAccessor = (d: ChartData) => d.date;
-
-  let priceLineColor = "blue";
-  let priceFillColor = "rgb(173, 216, 230, 0.3)";
-  if (
-    data.length > 1 &&
-    data[data.length - 1].close > data[data.length - 2].close
-  ) {
-    if (theme == "light") {
-      priceLineColor = "rgba(30, 255, 100)";
-      priceFillColor = "rgb(144, 238, 144, 0.3)";
-    } else {
-      priceLineColor = "rgba(100, 255, 100)";
-      priceFillColor = "rgb(144, 238, 144, 0.2)";
-    }
-  } else {
-    priceLineColor = "red";
-    priceFillColor = "rgb(255, 182, 193, 0.3)";
-  }
+  const [priceData, setPriceData] = useState<ChartData[]>([]);
+  const [currPriceData, setCurrPriceData] = useState({
+    date: new Date(),
+    open: 0,
+    close: 0,
+    priceChange: 0,
+    percentChange: 0,
+    low: 0,
+    high: 0,
+    volume: 0,
+  });
 
   useEffect(() => {
-    const formatDate = (date: Date) => {
-      return dayjs(date).format("YYYY-MM-DD")
-    };
+    const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
 
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tinngo_stock_prices`,
-        {
-          params: {
-            ticker: ticker,
-            start_date: formatDate(startDate),
-            end_date: formatDate(endDate),
-            format: "json",
-            resampleFreq: "monthly",
-          },
-        }
-      )
-      .then((res) => {
-        const formattedData = res.data.map((d: any) => ({
+    const fetchStockPrices = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tinngo_stock_prices`,
+          {
+            params: {
+              ticker: ticker,
+              start_date: formatDate(startDate),
+              end_date: formatDate(endDate),
+              format: "json",
+              resampleFreq: "monthly",
+            },
+          }
+        );
+
+        const formattedData = response.data.map((d: any) => ({
           date: new Date(d?.date),
           open: +d?.open,
           close: +d?.close,
@@ -83,11 +75,46 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, startDate, endDate }) => 
           high: +d?.high,
           volume: +d?.adjVolume,
         }));
-        setData(formattedData);
-      });
+
+        setPriceData(formattedData);
+      } catch (error) {
+        console.error("Failed to fetch stock prices:", error);
+      }
+    };
+
+    fetchStockPrices();
   }, [ticker, startDate, endDate]);
 
-  return data.length === 0 ? (
+  const getChartColors = () => {
+    let axisColor = "black";
+    let priceLineColor = "blue";
+    let priceFillColor = "rgb(173, 216, 230, 0.3)";
+
+    if (
+      priceData.length > 1 &&
+      priceData[priceData.length - 1].close >
+        priceData[priceData.length - 2].close
+    ) {
+      if (theme === "light") {
+        priceLineColor = "rgba(30, 255, 100)";
+        priceFillColor = "rgb(144, 238, 144, 0.3)";
+      } else {
+        priceLineColor = "rgba(100, 255, 100)";
+        priceFillColor = "rgb(144, 238, 144, 0.2)";
+        axisColor = "white";
+      }
+    } else {
+      priceLineColor = "red";
+      priceFillColor = "rgb(255, 182, 193, 0.3)";
+    }
+
+    return { axisColor, priceLineColor, priceFillColor };
+  };
+
+  const { axisColor, priceLineColor, priceFillColor } = getChartColors();
+  const xAccessor = (d: ChartData) => d.date;
+
+  return priceData.length === 0 ? (
     <div className="flex justify-center items-center h-full">
       <Loader />
     </div>
@@ -99,10 +126,13 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, startDate, endDate }) => 
         width={600}
         margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
         seriesName={ticker}
-        data={data}
+        data={priceData}
         xScale={scaleTime()}
         xAccessor={xAccessor}
-        xExtents={[xAccessor(data[0]), xAccessor(data[data.length - 1])]}
+        xExtents={[
+          xAccessor(priceData[0]),
+          xAccessor(priceData[priceData.length - 1]),
+        ]}
         disableZoom={true}
         disablePan={true}
       >
