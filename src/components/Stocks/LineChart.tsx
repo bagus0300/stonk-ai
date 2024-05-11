@@ -76,12 +76,12 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, startDate, endDate }) => 
       )
       .then((res) => {
         const formattedData = res.data.map((d: any) => ({
-          date: new Date(d.date),
-          open: +d.open,
-          close: +d.close,
-          low: +d.low,
-          high: +d.high,
-          volume: +d.adjVolume,
+          date: new Date(d?.date),
+          open: +d?.open,
+          close: +d?.close,
+          low: +d?.low,
+          high: +d?.high,
+          volume: +d?.adjVolume,
         }));
         setData(formattedData);
       });
