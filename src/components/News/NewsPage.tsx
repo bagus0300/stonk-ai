@@ -37,15 +37,15 @@ const NewsDisplay = () => {
   ]);
 
   const dateRangeOptions = new Map<number, string>([
-    [0, "Last 24 hours"],
-    [1, "Last 3 days"],
-    [2, "Last week"],
+    [0, "24 hours ago"],
+    [1, "3 days ago"],
+    [2, "1 week ago"],
   ]);
 
   const dateRanges = new Map<number, Array<string>>([
-    [0, [getDateDaysBefore(1), getDateDaysBefore(0)]],
-    [1, [getDateDaysBefore(3), getDateDaysBefore(0)]],
-    [2, [getDateDaysBefore(7), getDateDaysBefore(0)]],
+    [0, [getDateDaysBefore(7), getDateDaysBefore(0)]],
+    [1, [getDateDaysBefore(7), getDateDaysBefore(3)]],
+    [2, [getDateDaysBefore(7), getDateDaysBefore(7)]],
   ]);
 
   const loadArticles = async (curr_page: number) => {
