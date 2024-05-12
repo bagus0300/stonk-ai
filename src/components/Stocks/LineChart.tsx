@@ -1,7 +1,5 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTheme } from "next-themes";
-import axios from "axios";
 import { scaleTime } from "d3-scale";
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
@@ -15,104 +13,37 @@ import {
   AreaSeries,
   HoverTooltip,
 } from "react-financial-charts";
-import dayjs from "dayjs";
 
+import { PriceData } from "@/src/types/Stock";
 import TooltipContent from "@/src/components/Stocks/Tooltip";
 import Loader from "@/src/components/units/Loader";
 
 interface LineChartProps {
   ticker: string;
-  startDate: Date;
-  endDate: Date;
+  priceData: PriceData[];
 }
 
-interface ChartData {
-  date: Date;
-  close: number;
-}
-
-const LineChart: React.FC<LineChartProps> = ({
-  ticker,
-  startDate,
-  endDate,
-}) => {
+const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
   const { theme } = useTheme();
-  const [priceData, setPriceData] = useState<ChartData[]>([]);
-  const [currPriceData, setCurrPriceData] = useState({
-    date: new Date(),
-    open: 0,
-    close: 0,
-    priceChange: 0,
-    percentChange: 0,
-    low: 0,
-    high: 0,
-    volume: 0,
-  });
-
-  useEffect(() => {
-    const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
-
-    const fetchStockPrices = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tinngo_stock_prices`,
-          {
-            params: {
-              ticker: ticker,
-              start_date: formatDate(startDate),
-              end_date: formatDate(endDate),
-              format: "json",
-              resampleFreq: "monthly",
-            },
-          }
-        );
-
-        const formattedData = response.data.map((d: any) => ({
-          date: new Date(d?.date),
-          open: +d?.open,
-          close: +d?.close,
-          low: +d?.low,
-          high: +d?.high,
-          volume: +d?.adjVolume,
-        }));
-
-        setPriceData(formattedData);
-      } catch (error) {
-        console.error("Failed to fetch stock prices:", error);
-      }
-    };
-
-    fetchStockPrices();
-  }, [ticker, startDate, endDate]);
 
   const getChartColors = () => {
     let axisColor = "black";
     let priceLineColor = "blue";
     let priceFillColor = "rgb(173, 216, 230, 0.3)";
 
-    if (
-      priceData.length > 1 &&
-      priceData[priceData.length - 1].close >
-        priceData[priceData.length - 2].close
-    ) {
-      if (theme === "light") {
-        priceLineColor = "rgba(30, 255, 100)";
-        priceFillColor = "rgb(144, 238, 144, 0.3)";
-      } else {
-        priceLineColor = "rgba(100, 255, 100)";
-        priceFillColor = "rgb(144, 238, 144, 0.2)";
-        axisColor = "white";
-      }
+    if (theme === "light") {
+      priceLineColor = "rgba(30, 255, 100)";
+      priceFillColor = "rgb(144, 238, 144, 0.3)";
     } else {
-      priceLineColor = "red";
-      priceFillColor = "rgb(255, 182, 193, 0.3)";
+      priceLineColor = "rgba(100, 255, 100)";
+      priceFillColor = "rgb(144, 238, 144, 0.2)";
+      axisColor = "white";
     }
-
     return { axisColor, priceLineColor, priceFillColor };
   };
 
   const { axisColor, priceLineColor, priceFillColor } = getChartColors();
-  const xAccessor = (d: ChartData) => d.date;
+  const xAccessor = (d: PriceData) => d?.date;
 
   return priceData.length === 0 ? (
     <div className="flex justify-center items-center h-full">
@@ -136,7 +67,7 @@ const LineChart: React.FC<LineChartProps> = ({
         disableZoom={true}
         disablePan={true}
       >
-        <Chart id={1} yExtents={(d: ChartData) => [d.close]}>
+        <Chart id={1} yExtents={(d: PriceData) => [d.close]}>
           <XAxis
             axisAt="bottom"
             orient="bottom"
@@ -157,7 +88,7 @@ const LineChart: React.FC<LineChartProps> = ({
             gridLinesStrokeStyle="#e0e0e0"
           />
           <AreaSeries
-            yAccessor={(d: ChartData) => d.close}
+            yAccessor={(d: PriceData) => d.close}
             baseAt={(scale) => scale(0)}
             strokeStyle={priceLineColor}
             fillStyle={priceFillColor}

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useTheme } from "next-themes";
+import dayjs from "dayjs";
+import axios from "axios";
 
+import { PriceData } from "@/src/types/Stock";
 import LineChart from "@/src/components/Stocks/LineChart";
 
 interface StockModalProps {
@@ -24,6 +27,53 @@ const StockModal: React.FC<StockModalProps> = ({
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [messages, setMessages] = useState<Message[]>([]);
+  const [priceData, setPriceData] = useState<PriceData[]>([]);
+  const [currPriceData, setCurrPriceData] = useState({
+    date: new Date(),
+    open: 0,
+    close: 0,
+    priceChange: 0,
+    percentChange: 0,
+    low: 0,
+    high: 0,
+    volume: 0,
+  });
+
+  useEffect(() => {
+    const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
+
+    const fetchStockPrices = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tinngo_stock_prices`,
+          {
+            params: {
+              ticker: ticker,
+              start_date: formatDate(startDate),
+              end_date: formatDate(endDate),
+              format: "json",
+              resampleFreq: "monthly",
+            },
+          }
+        );
+
+        const formattedData = response.data.map((d: any) => ({
+          date: new Date(d?.date),
+          open: +d?.open,
+          close: +d?.close,
+          low: +d?.low,
+          high: +d?.high,
+          volume: +d?.adjVolume,
+        }));
+
+        setPriceData(formattedData);
+      } catch (error) {
+        console.error("Failed to fetch stock prices:", error);
+      }
+    };
+
+    fetchStockPrices();
+  }, [ticker, startDate, endDate]);
 
   useEffect(() => {
     const socket = new WebSocket(
@@ -159,7 +209,7 @@ const StockModal: React.FC<StockModalProps> = ({
               </button>
             ))}
           </div>
-          <LineChart ticker={ticker} startDate={startDate} endDate={endDate} />
+          <LineChart ticker={ticker} priceData={priceData} />
         </div>
       </div>
     </Modal>

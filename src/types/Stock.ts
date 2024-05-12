@@ -8,6 +8,11 @@ export interface StockInfo {
   type: string;
 }
 
+export interface PriceData {
+  date: Date;
+  close: number;
+}
+
 export interface CompanyProfile {
   country: string;
   currency: string;
