@@ -23,7 +23,7 @@ const StocksPage = () => {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [currTicker, setCurrTicker] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { searchQuery } = useContext(SearchContext) as SearchContextProps;
   const PAGE_SIZE = 10;
 
@@ -39,10 +39,6 @@ const StocksPage = () => {
       }
     };
 
-    fetchStockExchange();
-  }, []);
-
-  useEffect(() => {
     const fetchStockTicker = async () => {
       try {
         const response = await axios.get("/api/stock/ticker");
@@ -52,8 +48,17 @@ const StocksPage = () => {
       }
     };
 
+    fetchStockExchange();
     fetchStockTicker();
   }, []);
+
+  useEffect(() => {
+    if (stockInfo) {
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
+  }, [stockInfo]);
 
   useEffect(() => {
     if (!stockInfo) return;
@@ -121,25 +126,17 @@ const StocksPage = () => {
               handleSubmit={getFilteredTickers}
             />
           </div>
-          {filteredStockInfo && Array.isArray(filteredStockInfo) ? (
+          {filteredStockInfo && Array.isArray(filteredStockInfo) && (
             <>
-              {filteredStockInfo && Array.isArray(filteredStockInfo) ? (
-                <>
-                  {filteredStockInfo.slice(0, page * PAGE_SIZE).map((stock) => (
-                    <div
-                      key={stock.symbol}
-                      onClick={() => handleOpenModal(stock.symbol)}
-                    >
-                      <TickerCard ticker={stock.symbol} />
-                    </div>
-                  ))}
-                </>
-              ) : null}
+              {filteredStockInfo.slice(0, page * PAGE_SIZE).map((stock) => (
+                <div
+                  key={stock.symbol}
+                  onClick={() => handleOpenModal(stock.symbol)}
+                >
+                  <TickerCard ticker={stock.symbol} />
+                </div>
+              ))}
             </>
-          ) : (
-            <div className="fixed top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-              <Loader />
-            </div>
           )}
         </div>
         <div className="flex justify-center mt-10">
