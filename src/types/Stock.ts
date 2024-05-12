@@ -10,7 +10,11 @@ export interface StockInfo {
 
 export interface PriceData {
   date: Date;
+  open: number;
   close: number;
+  low: number;
+  high: number;
+  volume: number;
 }
 
 export interface CompanyProfile {

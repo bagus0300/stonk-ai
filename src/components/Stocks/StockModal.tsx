@@ -76,6 +76,26 @@ const StockModal: React.FC<StockModalProps> = ({
   }, [ticker, startDate, endDate]);
 
   useEffect(() => {
+    if (priceData.length > 0) {
+      const mostRecentData = priceData[priceData.length - 1];
+
+      const priceChange = mostRecentData.close - mostRecentData.open;
+      const percentChange = (priceChange / mostRecentData.open) * 100;
+
+      setCurrPriceData({
+        date: new Date(mostRecentData.date),
+        open: mostRecentData.open,
+        close: mostRecentData.close,
+        priceChange: priceChange,
+        percentChange: percentChange,
+        low: mostRecentData.low,
+        high: mostRecentData.high,
+        volume: mostRecentData.volume,
+      });
+    }
+  }, [priceData]);
+
+  useEffect(() => {
     const socket = new WebSocket(
       `wss://ws.finnhub.io?token=${process.env.NEXT_PUBLIC_FINNHUB_KEY}`
     );
@@ -209,6 +229,33 @@ const StockModal: React.FC<StockModalProps> = ({
               </button>
             ))}
           </div>
+          <div className="flex flex-col items-start ml-[12vw] p-4">
+            <div className="flex space-x-3">
+              <p className="text-xl font-semibold">{currPriceData.close}</p>
+              <p
+                className={`text-lg font-semibold ${
+                  currPriceData.priceChange >= 0
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                {currPriceData.priceChange >= 0
+                  ? `+${currPriceData.priceChange.toFixed(2)}`
+                  : `${currPriceData.priceChange.toFixed(2)} `}
+                <span>
+                  (
+                  {currPriceData.percentChange >= 0
+                    ? `+${currPriceData.percentChange.toFixed(2)}`
+                    : `${currPriceData.percentChange.toFixed(2)}`}
+                  %)
+                </span>
+              </p>
+            </div>
+            <p className="text-sm mt-1">
+              {`At close on ${currPriceData.date}`}
+            </p>
+          </div>
+
           <LineChart ticker={ticker} priceData={priceData} />
         </div>
       </div>
