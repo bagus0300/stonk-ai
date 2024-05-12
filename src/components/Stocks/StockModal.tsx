@@ -6,6 +6,7 @@ import axios from "axios";
 
 import { PriceData } from "@/src/types/Stock";
 import LineChart from "@/src/components/Stocks/LineChart";
+import DataTable from "@/src/components/Stocks/DataTable";
 
 interface StockModalProps {
   isOpen: boolean;
@@ -86,8 +87,8 @@ const StockModal: React.FC<StockModalProps> = ({
         date: new Date(mostRecentData.date),
         open: mostRecentData.open,
         close: mostRecentData.close,
-        priceChange: priceChange,
-        percentChange: percentChange,
+        priceChange: parseFloat(priceChange.toFixed(2)),
+        percentChange: parseFloat(percentChange.toFixed(2)),
         low: mostRecentData.low,
         high: mostRecentData.high,
         volume: mostRecentData.volume,
@@ -191,12 +192,12 @@ const StockModal: React.FC<StockModalProps> = ({
       className="modal fixed inset-0 flex items-center justify-center z-50"
       ariaHideApp={false}
     >
-      <div className="relative p-4 w-full max-w-5xl max-h-full ">
+      <div className="relative w-full max-w-5xl max-h-[calc(100vh-5rem)] overflow-y-auto ">
         <div
-          className="relative rounded-lg"
+          className="relative pb-10 border-gray-400 border-2 rounded-xl"
           style={{ backgroundColor: theme === "light" ? "white" : "black" }}
         >
-          <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+          <div className="flex items-center justify-between p-4 md:p-5 border-b dark:border-gray-600">
             <h3 className="text-xl font-semibold ">{ticker}</h3>
             <button
               type="button"
@@ -240,13 +241,13 @@ const StockModal: React.FC<StockModalProps> = ({
                 }`}
               >
                 {currPriceData.priceChange >= 0
-                  ? `+${currPriceData.priceChange.toFixed(2)}`
-                  : `${currPriceData.priceChange.toFixed(2)} `}
+                  ? `+${currPriceData.priceChange}`
+                  : `${currPriceData.priceChange} `}
                 <span>
                   (
                   {currPriceData.percentChange >= 0
-                    ? `+${currPriceData.percentChange.toFixed(2)}`
-                    : `${currPriceData.percentChange.toFixed(2)}`}
+                    ? `+${currPriceData.percentChange}`
+                    : `${currPriceData.percentChange}`}
                   %)
                 </span>
               </p>
@@ -255,8 +256,18 @@ const StockModal: React.FC<StockModalProps> = ({
               {`At close on ${currPriceData.date}`}
             </p>
           </div>
-
           <LineChart ticker={ticker} priceData={priceData} />
+          <div className="flex justify-center ">
+            <div className="w-1/2">
+              <DataTable
+                open={currPriceData.open}
+                close={currPriceData.close}
+                low={currPriceData.low}
+                high={currPriceData.high}
+                volume={currPriceData.volume}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </Modal>
