@@ -1,16 +1,16 @@
 import React from "react";
 
 interface DataTableProps {
-  open: number;
-  close: number;
-  low: number;
-  high: number;
-  volume: number;
+  open: string;
+  close: string;
+  low: string;
+  high: string;
+  volume: string;
 }
 
 interface TableColumnProps {
   label: string;
-  value: number;
+  value: string;
 }
 
 const TableColumn: React.FC<TableColumnProps> = ({ label, value }) => {
