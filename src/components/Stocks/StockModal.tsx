@@ -221,7 +221,7 @@ const StockModal: React.FC<StockModalProps> = ({
           <div className="flex flex-col items-start ml-[12vw] p-4">
             <div className="flex space-x-3">
               <p className="text-xl font-semibold">
-                {currPriceData.close.toString()}
+                {`${currPriceData.close}`}
               </p>
               <p
                 className={`text-lg font-semibold ${
@@ -231,13 +231,13 @@ const StockModal: React.FC<StockModalProps> = ({
                 }`}
               >
                 {currPriceData.priceChange >= 0
-                  ? `+${currPriceData.priceChange.toString()}`
-                  : `${currPriceData.priceChange.toString()} `}
+                  ? `+${currPriceData.priceChange}`
+                  : `${currPriceData.priceChange} `}
                 <span>
                   (
                   {currPriceData.percentChange >= 0
-                    ? `+${currPriceData.percentChange.toString()}`
-                    : `${currPriceData.percentChange.toString()}`}
+                    ? `+${currPriceData.percentChange}`
+                    : `${currPriceData.percentChange}`}
                   %)
                 </span>
               </p>
@@ -249,13 +249,7 @@ const StockModal: React.FC<StockModalProps> = ({
           <LineChart ticker={ticker} priceData={priceData} />
           <div className="flex justify-center ">
             <div className="w-1/2">
-              <DataTable
-                open={currPriceData.open.toString()}
-                close={currPriceData.close.toString()}
-                low={currPriceData.low.toString()}
-                high={currPriceData.high.toString()}
-                volume={currPriceData.volume.toString()}
-              />
+              <DataTable currPriceData={currPriceData} />
             </div>
           </div>
         </div>
