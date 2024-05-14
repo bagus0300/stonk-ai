@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useTheme } from "next-themes";
-import dayjs from "dayjs";
 import axios from "axios";
 
 import { PriceData, DEFAULT_PRICE_DATA } from "@/src/types/Stock";
 import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/PriceUtils";
+import { dateToISOString } from "@/src/utils/DateUtils";
 import LineChart from "@/src/components/Stocks/LineChart";
 import DataTable from "@/src/components/Stocks/DataTable";
 
@@ -27,15 +27,12 @@ const StockModal: React.FC<StockModalProps> = ({
   const { theme } = useTheme();
   const [selectedRange, setSelectedRange] = useState("YTD");
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [messages, setMessages] = useState<Message[]>([]);
   const [priceData, setPriceData] = useState<PriceData[]>([]);
   const [currPriceData, setCurrPriceData] =
     useState<PriceData>(DEFAULT_PRICE_DATA);
 
   useEffect(() => {
-    const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
-
     const fetchStockPrices = async () => {
       try {
         const response = await axios.get(
@@ -43,8 +40,8 @@ const StockModal: React.FC<StockModalProps> = ({
           {
             params: {
               ticker: ticker,
-              start_date: formatDate(startDate),
-              end_date: formatDate(endDate),
+              start_date: dateToISOString(startDate),
+              end_date: dateToISOString(new Date()),
               format: "json",
               resampleFreq: "monthly",
             },
@@ -71,10 +68,10 @@ const StockModal: React.FC<StockModalProps> = ({
       }
     };
 
-    if (ticker) {
+    if (isOpen) {
       fetchStockPrices();
     }
-  }, [ticker, startDate, endDate]);
+  }, [ticker, startDate]);
 
   useEffect(() => {
     if (priceData.length > 0) {
@@ -150,22 +147,6 @@ const StockModal: React.FC<StockModalProps> = ({
 
     calculateStartDate(selectedRange);
   }, [selectedRange]);
-
-  useEffect(() => {
-    const calculateEndDate = () => {
-      const today = new Date();
-      const dayOfWeek = today.getDay();
-
-      if (dayOfWeek === 0) {
-        today.setDate(today.getDate() - 2);
-      } else if (dayOfWeek === 6) {
-        today.setDate(today.getDate() - 1);
-      }
-
-      return today;
-    };
-    setEndDate(calculateEndDate());
-  }, []);
 
   const handleRangeChange = (range: string) => {
     setSelectedRange(range);
