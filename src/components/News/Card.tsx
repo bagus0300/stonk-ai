@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Article } from "@/src/types/Article";
-import { getPriceDifference, getPriceAction } from "@/src/utils/FilterUtils";
+import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/PriceUtils";
 
 const Card: React.FC<Article> = ({
   title,
@@ -70,7 +70,9 @@ const Card: React.FC<Article> = ({
         <div className="flex flex-row space-x-4">
           <p className="text-red-400 text-xl font-bold mb-2">{ticker}</p>
           <p
-            className={`text-xl font-semibold ${getSentimentColorClass(sentiment)}`}
+            className={`text-xl font-semibold ${getSentimentColorClass(
+              sentiment
+            )}`}
           >
             {sentiment}
           </p>
@@ -98,8 +100,8 @@ const Card: React.FC<Article> = ({
                 : open_price > close_price
                 ? "▼"
                 : ""}
-              {getPriceDifference(open_price, close_price)} (
-              {getPriceAction(open_price, close_price)}%)
+              {getPriceDiffStr(open_price, close_price)} (
+              {getPercentChangeStr(open_price, close_price)})
             </p>
           </div>
         ) : (

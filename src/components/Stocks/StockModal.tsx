@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 
 import { PriceData, DEFAULT_PRICE_DATA } from "@/src/types/Stock";
+import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/PriceUtils";
 import LineChart from "@/src/components/Stocks/LineChart";
 import DataTable from "@/src/components/Stocks/DataTable";
 
@@ -70,16 +71,14 @@ const StockModal: React.FC<StockModalProps> = ({
       }
     };
 
-    fetchStockPrices();
+    if (ticker) {
+      fetchStockPrices();
+    }
   }, [ticker, startDate, endDate]);
 
   useEffect(() => {
     if (priceData.length > 0) {
       const mostRecentData = priceData[priceData.length - 1];
-      const priceChange = mostRecentData.close - mostRecentData.open;
-      const percentChange = (priceChange / mostRecentData.open) * 100;
-      mostRecentData["priceChange"] = parseFloat(priceChange.toFixed(2));
-      mostRecentData["percentChange"] = parseFloat(percentChange.toFixed(2));
       setCurrPriceData(mostRecentData);
     }
   }, [priceData]);
@@ -225,20 +224,16 @@ const StockModal: React.FC<StockModalProps> = ({
               </p>
               <p
                 className={`text-lg font-semibold ${
-                  currPriceData.priceChange >= 0
+                  currPriceData.priceDifference >= 0
                     ? "text-green-500"
                     : "text-red-500"
                 }`}
               >
-                {currPriceData.priceChange >= 0
-                  ? `+${currPriceData.priceChange}`
-                  : `${currPriceData.priceChange} `}
+                {getPriceDiffStr(currPriceData.open, currPriceData.close)}
                 <span>
-                  (
-                  {currPriceData.percentChange >= 0
-                    ? `+${currPriceData.percentChange}`
-                    : `${currPriceData.percentChange}`}
-                  %)
+                  {` `}(
+                  {getPercentChangeStr(currPriceData.open, currPriceData.close)}
+                  )
                 </span>
               </p>
             </div>

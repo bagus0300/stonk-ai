@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { CompanyProfile, QuoteInfo } from "@/src/types/Stock";
-import { getPriceDifference } from "@/src/utils/FilterUtils";
+import { getPriceDiffStr } from "@/src/utils/PriceUtils";
 
 interface TickerCardProps {
   ticker: string;
@@ -58,9 +58,10 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
             className="w-12 h-12"
           />
           <div className="flex-grow">
-          <p className="text-sm">
-            {companyProfile.ticker} - {companyProfile.name} - {companyProfile.exchange}
-          </p>
+            <p className="text-sm">
+              {companyProfile.ticker} - {companyProfile.name} -{" "}
+              {companyProfile.exchange}
+            </p>
           </div>
           {quoteInfo && (
             <div className="flex flex-col items-center text-sm p-2 font-bold">
@@ -70,7 +71,7 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
                   quoteInfo.c > quoteInfo.o ? "bg-green-500" : "bg-red-500"
                 } px-2 py-1`}
               >
-                {getPriceDifference(quoteInfo.o, quoteInfo.c)}
+                {getPriceDiffStr(quoteInfo.o, quoteInfo.c)}
               </p>
             </div>
           )}

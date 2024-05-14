@@ -3,8 +3,11 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import { Article } from "@/src/types/Article";
-import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
-import { getDateDaysBefore } from "@/src/utils/FilterUtils";
+import {
+  SearchContext,
+  SearchContextProps,
+} from "@/src/providers/SearchProvider";
+import { getDateDaysBefore } from "@/src/utils/DateUtils";
 import Card from "@/src/components/News/Card";
 import Loader from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
@@ -20,9 +23,15 @@ const NewsDisplay = () => {
 
   const [tickerOptions, setTickerOptions] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
-  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(null);
-  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(null);
-  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(null);
+  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(
+    null
+  );
+  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(
+    null
+  );
+  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(
+    null
+  );
 
   const sentimentOptions = new Map<number, string>([
     [0, "Positive"],
@@ -50,15 +59,16 @@ const NewsDisplay = () => {
 
   const loadArticles = async (curr_page: number) => {
     try {
-      const sentiment = selectedSentiment != null
+      const sentiment =
+        selectedSentiment != null
           ? sentimentOptions.get(selectedSentiment) || ""
           : "";
-      const priceAction = selectedPriceAction != null
+      const priceAction =
+        selectedPriceAction != null
           ? priceActionOptions.get(selectedPriceAction) || ""
           : "";
-      const dateRange = selectedDateRange != null 
-          ? dateRanges.get(selectedDateRange) 
-          : null;
+      const dateRange =
+        selectedDateRange != null ? dateRanges.get(selectedDateRange) : null;
       const startDate = dateRange ? dateRange[0] : "";
       const endDate = dateRange ? dateRange[1] : "";
 
@@ -72,7 +82,9 @@ const NewsDisplay = () => {
         end_date: endDate,
       });
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/article/news?${queryParams}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/article/news?${queryParams}`
+      );
       setPage((prev) => prev + 1);
 
       if (response.ok) {
