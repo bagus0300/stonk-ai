@@ -1,3 +1,5 @@
+// Types
+
 export interface StockInfo {
   currency: string;
   description: string;
@@ -11,10 +13,19 @@ export interface StockInfo {
 export interface PriceData {
   date: Date;
   open: number;
-  close: number;
-  low: number;
   high: number;
+  low: number;
+  close: number;
+  priceChange: number;
+  percentChange: number;
   volume: number;
+  adjOpen: number;
+  adjHigh: number;
+  adjLow: number;
+  adjClose: number;
+  adjVolume: number;
+  divCash: number;
+  splitFactor: number;
 }
 
 export interface CompanyProfile {
@@ -35,3 +46,23 @@ export interface QuoteInfo {
   pc: number;
   t: number;
 }
+
+// Defaults
+
+export const DEFAULT_PRICE_DATA: PriceData = {
+  date: new Date(),
+  open: 0,
+  high: 0,
+  low: 0,
+  close: 0,
+  priceChange: 0,
+  percentChange: 0,
+  volume: 0,
+  adjOpen: 0,
+  adjHigh: 0,
+  adjLow: 0,
+  adjClose: 0,
+  adjVolume: 0,
+  divCash: 0,
+  splitFactor: 0,
+};

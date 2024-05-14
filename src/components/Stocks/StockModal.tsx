@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import dayjs from "dayjs";
 import axios from "axios";
 
-import { PriceData } from "@/src/types/Stock";
+import { PriceData, DEFAULT_PRICE_DATA } from "@/src/types/Stock";
 import LineChart from "@/src/components/Stocks/LineChart";
 import DataTable from "@/src/components/Stocks/DataTable";
 
@@ -29,16 +29,8 @@ const StockModal: React.FC<StockModalProps> = ({
   const [endDate, setEndDate] = useState(new Date());
   const [messages, setMessages] = useState<Message[]>([]);
   const [priceData, setPriceData] = useState<PriceData[]>([]);
-  const [currPriceData, setCurrPriceData] = useState({
-    date: new Date(),
-    open: 0,
-    close: 0,
-    priceChange: 0,
-    percentChange: 0,
-    low: 0,
-    high: 0,
-    volume: 0,
-  });
+  const [currPriceData, setCurrPriceData] =
+    useState<PriceData>(DEFAULT_PRICE_DATA);
 
   useEffect(() => {
     const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
@@ -57,17 +49,22 @@ const StockModal: React.FC<StockModalProps> = ({
             },
           }
         );
-
-        const formattedData = response.data.map((d: any) => ({
+        const priceData = response.data.map((d: PriceData) => ({
           date: new Date(d?.date),
           open: +d?.open,
           close: +d?.close,
           low: +d?.low,
           high: +d?.high,
-          volume: +d?.adjVolume,
+          volume: +d?.volume,
+          adjOpen: +d?.adjOpen,
+          adjHigh: +d?.adjHigh,
+          adjLow: +d?.adjLow,
+          adjClose: +d?.adjClose,
+          adjVolume: +d?.adjVolume,
+          divCash: +d?.divCash,
+          splitFactor: +d?.splitFactor,
         }));
-
-        setPriceData(formattedData);
+        setPriceData(priceData);
       } catch (error) {
         console.error("Failed to fetch stock prices:", error);
       }
@@ -79,20 +76,11 @@ const StockModal: React.FC<StockModalProps> = ({
   useEffect(() => {
     if (priceData.length > 0) {
       const mostRecentData = priceData[priceData.length - 1];
-
       const priceChange = mostRecentData.close - mostRecentData.open;
       const percentChange = (priceChange / mostRecentData.open) * 100;
-
-      setCurrPriceData({
-        date: new Date(mostRecentData.date),
-        open: mostRecentData.open,
-        close: mostRecentData.close,
-        priceChange: parseFloat(priceChange.toFixed(2)),
-        percentChange: parseFloat(percentChange.toFixed(2)),
-        low: mostRecentData.low,
-        high: mostRecentData.high,
-        volume: mostRecentData.volume,
-      });
+      mostRecentData["priceChange"] = parseFloat(priceChange.toFixed(2));
+      mostRecentData["percentChange"] = parseFloat(percentChange.toFixed(2));
+      setCurrPriceData(mostRecentData);
     }
   }, [priceData]);
 
@@ -232,7 +220,9 @@ const StockModal: React.FC<StockModalProps> = ({
           </div>
           <div className="flex flex-col items-start ml-[12vw] p-4">
             <div className="flex space-x-3">
-              <p className="text-xl font-semibold">{currPriceData.close.toString()}</p>
+              <p className="text-xl font-semibold">
+                {currPriceData.close.toString()}
+              </p>
               <p
                 className={`text-lg font-semibold ${
                   currPriceData.priceChange >= 0
