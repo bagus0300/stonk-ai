@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Modal from "react-modal";
 import { useTheme } from "next-themes";
 import axios from "axios";
 
-import { PriceData, DEFAULT_PRICE_DATA } from "@/src/types/Stock";
+import {
+  PriceData,
+  TradeData,
+  DEFAULT_PRICE_DATA,
+  DEFAULT_TRADE_DATA,
+} from "@/src/types/Stock";
 import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/PriceUtils";
 import { dateToISOString } from "@/src/utils/DateUtils";
+import WebSocketManager from "@/src/websocket/SocketManager";
 import LineChart from "@/src/components/Stocks/LineChart";
 import DataTable from "@/src/components/Stocks/DataTable";
 
@@ -13,10 +19,6 @@ interface StockModalProps {
   isOpen: boolean;
   ticker: string;
   handleClose: () => void;
-}
-
-interface Message {
-  data: string;
 }
 
 const StockModal: React.FC<StockModalProps> = ({
@@ -27,10 +29,11 @@ const StockModal: React.FC<StockModalProps> = ({
   const { theme } = useTheme();
   const [selectedRange, setSelectedRange] = useState("YTD");
   const [startDate, setStartDate] = useState(new Date());
-  const [messages, setMessages] = useState<Message[]>([]);
   const [priceData, setPriceData] = useState<PriceData[]>([]);
+  const [latestTrade, setlatestTrade] = useState<TradeData>(DEFAULT_TRADE_DATA);
   const [currPriceData, setCurrPriceData] =
     useState<PriceData>(DEFAULT_PRICE_DATA);
+  const wsManagerRef = useRef<WebSocketManager | null>(null);
 
   useEffect(() => {
     const fetchStockPrices = async () => {
@@ -81,33 +84,32 @@ const StockModal: React.FC<StockModalProps> = ({
   }, [priceData]);
 
   useEffect(() => {
-    const socket = new WebSocket(
-      `wss://ws.finnhub.io?token=${process.env.NEXT_PUBLIC_FINNHUB_KEY}`
-    );
+    const updateTrade = (updatedPrices: Record<string, TradeData>) => {
+      const latestTradeData = updatedPrices[ticker];
+      setlatestTrade(latestTradeData);
+    };
 
-    const openHandler = () => {
-      if (socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: "subscribe", symbol: ticker }));
+    if (isOpen) {
+      // Intialize a new connection when the modal opens
+      if (!wsManagerRef.current) {
+        wsManagerRef.current = new WebSocketManager(updateTrade);
+        wsManagerRef.current.addSubListener([ticker]);
+      } else {
+        wsManagerRef.current.addSubListener([ticker]);
+      }
+    } else if (wsManagerRef.current) {
+      // Unsubscribe when modal closes
+      wsManagerRef.current.unsubscribe([ticker]);
+    }
+
+    // Close connection on dismount
+    return () => {
+      if (wsManagerRef.current) {
+        wsManagerRef.current.disconnect();
+        wsManagerRef.current = null;
       }
     };
-
-    const messageHandler = (event: MessageEvent) => {
-      // console.log("Message from server: ", event.data);
-      setMessages((prevMessages) => [...prevMessages, { data: event.data }]);
-    };
-
-    socket.addEventListener("open", openHandler);
-    socket.addEventListener("message", messageHandler);
-
-    return () => {
-      // socket.removeEventListener("open", openHandler);
-      // socket.removeEventListener("message", messageHandler);
-      // if (socket.readyState === WebSocket.OPEN) {
-      //   socket.send(JSON.stringify({ type: "unsubscribe", symbol: ticker }));
-      // }
-      // socket.close();
-    };
-  }, [ticker]);
+  }, [isOpen, ticker]);
 
   useEffect(() => {
     const calculateStartDate = (range: string) => {
@@ -222,6 +224,7 @@ const StockModal: React.FC<StockModalProps> = ({
               {`At close on ${currPriceData.date}`}
             </p>
           </div>
+          <p>Latest Price: {latestTrade.price}</p>
           <LineChart ticker={ticker} priceData={priceData} />
           <div className="flex justify-center ">
             <div className="w-1/2">

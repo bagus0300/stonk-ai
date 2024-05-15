@@ -28,14 +28,10 @@ export interface PriceData {
   splitFactor: number;
 }
 
-export interface CompanyProfile {
-  country: string;
-  currency: string;
-  exchange: string;
-  name: string;
-  ticker: string;
-  weburl: string;
-  logo: string;
+export interface TradeData {
+  price: number;
+  time: number;
+  volume: number;
 }
 
 export interface QuoteInfo {
@@ -45,6 +41,16 @@ export interface QuoteInfo {
   o: number;
   pc: number;
   t: number;
+}
+
+export interface CompanyProfile {
+  country: string;
+  currency: string;
+  exchange: string;
+  name: string;
+  ticker: string;
+  weburl: string;
+  logo: string;
 }
 
 // Defaults
@@ -65,4 +71,10 @@ export const DEFAULT_PRICE_DATA: PriceData = {
   adjVolume: 0,
   divCash: 0,
   splitFactor: 0,
+};
+
+export const DEFAULT_TRADE_DATA: TradeData = {
+  price: 0,
+  time: 0,
+  volume: 0,
 };
