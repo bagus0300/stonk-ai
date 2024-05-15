@@ -40,11 +40,11 @@ const DataTable: React.FC<DataTableProps> = ({
   return (
     <div className="p-4">
       <h2 className="font-bold mb-2">Latest Trade</h2>
-      <p className="mb-2 text-sm">At time {latestTradeData.time}</p>
+      <p className="mb-2 text-sm">At time {latestTradeData?.time}</p>
       <TableBody>
         <tbody>
-          <TableColumn label="Current Price" value={latestTradeData.price} />
-          <TableColumn label="Volume" value={latestTradeData.volume} />
+          <TableColumn label="Current Price" value={latestTradeData?.price} />
+          <TableColumn label="Volume" value={latestTradeData?.volume} />
         </tbody>
       </TableBody>
 
