@@ -224,11 +224,13 @@ const StockModal: React.FC<StockModalProps> = ({
               {`At close on ${currPriceData.date}`}
             </p>
           </div>
-          <p>Latest Price: {latestTrade.price}</p>
           <LineChart ticker={ticker} priceData={priceData} />
           <div className="flex justify-center ">
             <div className="w-1/2">
-              <DataTable currPriceData={currPriceData} />
+              <DataTable
+                currPriceData={currPriceData}
+                latestTradeData={latestTrade}
+              />
             </div>
           </div>
         </div>
