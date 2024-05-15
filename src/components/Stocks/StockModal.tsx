@@ -171,7 +171,7 @@ const StockModal: React.FC<StockModalProps> = ({
             <h3 className="text-xl font-semibold ">{ticker}</h3>
             <button
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-lg w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="text-gray-400 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white hover:text-gray-900 font-bold rounded-lg text-xl ml-5 w-10 h-10 ms-auto inline-flex justify-center items-center"
               onClick={handleClose}
             >
               X<span className="sr-only">Close modal</span>
@@ -226,7 +226,7 @@ const StockModal: React.FC<StockModalProps> = ({
           </div>
           <LineChart ticker={ticker} priceData={priceData} />
           <div className="flex justify-center ">
-            <div className="w-1/2">
+            <div className="w-4/5 sm:w-1/2">
               <DataTable
                 currPriceData={currPriceData}
                 latestTradeData={latestTrade}
