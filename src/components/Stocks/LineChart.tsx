@@ -27,18 +27,25 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
   const { theme } = useTheme();
 
   const getChartColors = () => {
-    let axisColor = "black";
-    let priceLineColor = "blue";
-    let priceFillColor = "rgb(173, 216, 230, 0.3)";
+    let axisColor = theme === "light" ? "black" : "white";
+    let priceLineColor = "rgba(255, 100, 100)"; // Default red
+    let priceFillColor = "rgba(255, 100, 100, 0.2)";
 
-    if (theme === "light") {
-      priceLineColor = "rgba(30, 255, 100)";
-      priceFillColor = "rgb(144, 238, 144, 0.3)";
-    } else {
-      priceLineColor = "rgba(100, 255, 100)";
-      priceFillColor = "rgb(144, 238, 144, 0.2)";
-      axisColor = "white";
+    if (priceData.length > 0) {
+      const priceDiff =
+        priceData[priceData.length - 1].close - priceData[0].close;
+
+      if (priceDiff > 0) {
+        if (theme === "light") {
+          priceLineColor = "rgba(30, 255, 100)";
+          priceFillColor = "rgb(144, 238, 144, 0.3)";
+        } else {
+          priceLineColor = "rgba(100, 255, 100)";
+          priceFillColor = "rgb(144, 238, 144, 0.2)";
+        }
+      }
     }
+
     return { axisColor, priceLineColor, priceFillColor };
   };
 
