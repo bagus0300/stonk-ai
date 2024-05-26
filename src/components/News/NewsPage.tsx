@@ -51,10 +51,10 @@ const NewsDisplay = () => {
     [2, "1 week ago"],
   ]);
 
-  const dateRanges = new Map<number, Array<string>>([
-    [0, [getDateDaysBefore(7), getDateDaysBefore(0)]],
-    [1, [getDateDaysBefore(7), getDateDaysBefore(3)]],
-    [2, [getDateDaysBefore(7), getDateDaysBefore(7)]],
+  const dateRanges = new Map<number, string>([
+    [0, getDateDaysBefore(1)],
+    [1, getDateDaysBefore(2)],
+    [2, getDateDaysBefore(6)],
   ]);
 
   const loadArticles = async (curr_page: number) => {
@@ -67,10 +67,10 @@ const NewsDisplay = () => {
         selectedPriceAction != null
           ? priceActionOptions.get(selectedPriceAction) || ""
           : "";
-      const dateRange =
-        selectedDateRange != null ? dateRanges.get(selectedDateRange) : null;
-      const startDate = dateRange ? dateRange[0] : "";
-      const endDate = dateRange ? dateRange[1] : "";
+      const endDate =
+        selectedDateRange != null
+          ? dateRanges.get(selectedDateRange) || ""
+          : "";
 
       const queryParams = new URLSearchParams({
         page: curr_page.toString(),
@@ -78,7 +78,6 @@ const NewsDisplay = () => {
         tickers: selectedTickers.join(","),
         sentiment: sentiment,
         price_action: priceAction,
-        start_date: startDate,
         end_date: endDate,
       });
 
