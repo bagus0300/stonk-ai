@@ -29,7 +29,9 @@ const StockModal: React.FC<StockModalProps> = ({
   const { theme } = useTheme();
   const [selectedRange, setSelectedRange] = useState("YTD");
   const [startDate, setStartDate] = useState(new Date());
-  const [priceData, setPriceData] = useState<PriceData[]>([]);
+  const [stockDataMap, setStockDataMap] = useState(
+    new Map<string, PriceData[]>()
+  );
   const [latestTrade, setlatestTrade] = useState<TradeData>(DEFAULT_TRADE_DATA);
   const [currPriceData, setCurrPriceData] =
     useState<PriceData>(DEFAULT_PRICE_DATA);
@@ -65,7 +67,7 @@ const StockModal: React.FC<StockModalProps> = ({
           divCash: +d?.divCash,
           splitFactor: +d?.splitFactor,
         }));
-        setPriceData(priceData);
+        setStockDataMap((prevMap) => new Map(prevMap.set(ticker, priceData)));
       } catch (error) {
         console.error("Failed to fetch stock prices:", error);
       }
@@ -77,11 +79,12 @@ const StockModal: React.FC<StockModalProps> = ({
   }, [ticker, startDate]);
 
   useEffect(() => {
-    if (priceData.length > 0) {
-      const mostRecentData = priceData[priceData.length - 1];
+    const tickerData = stockDataMap.get(ticker);
+    if (tickerData && tickerData.length > 0) {
+      const mostRecentData = tickerData[tickerData.length - 1];
       setCurrPriceData(mostRecentData);
     }
-  }, [priceData]);
+  }, [stockDataMap, ticker]);
 
   useEffect(() => {
     const updateTrade = (updatedPrices: Record<string, TradeData>) => {
@@ -224,7 +227,10 @@ const StockModal: React.FC<StockModalProps> = ({
               {`At close on ${currPriceData.date}`}
             </p>
           </div>
-          <LineChart ticker={ticker} priceData={priceData} />
+          <LineChart
+            ticker={ticker}
+            priceData={stockDataMap.get(ticker) || []}
+          />
           <div className="flex justify-center ">
             <div className="w-4/5 sm:w-1/2">
               <DataTable
