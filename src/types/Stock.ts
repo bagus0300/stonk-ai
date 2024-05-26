@@ -28,7 +28,7 @@ export interface PriceData {
   splitFactor: number;
 }
 
-export interface TradeData {
+export interface LiveTradeData {
   price: number;
   time: number;
   volume: number;
@@ -73,7 +73,7 @@ export const DEFAULT_PRICE_DATA: PriceData = {
   splitFactor: 0,
 };
 
-export const DEFAULT_TRADE_DATA: TradeData = {
+export const DEFAULT_LIVE_TRADE_DATA: LiveTradeData = {
   price: 0,
   time: 0,
   volume: 0,

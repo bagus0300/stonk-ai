@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import { PriceData, TradeData } from "@/src/types/Stock";
+import { PriceData, LiveTradeData } from "@/src/types/Stock";
 
 interface TableBodyProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ interface TableColumnProps {
 
 interface DataTableProps {
   currPriceData: PriceData;
-  latestTradeData: TradeData;
+  latestTradeData: LiveTradeData;
 }
 
 const TableBody: React.FC<TableBodyProps> = ({ children }) => {

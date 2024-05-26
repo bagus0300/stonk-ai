@@ -1,11 +1,11 @@
-import { TradeData } from "@/src/types/Stock";
+import { LiveTradeData } from "@/src/types/Stock";
 
 class WebSocketManager {
   private socket: WebSocket;
-  private prices: Record<string, TradeData>;
-  private setPrices: (prices: Record<string, TradeData>) => void;
+  private prices: Record<string, LiveTradeData>;
+  private setPrices: (prices: Record<string, LiveTradeData>) => void;
 
-  constructor(setPrices: (prices: Record<string, TradeData>) => void) {
+  constructor(setPrices: (prices: Record<string, LiveTradeData>) => void) {
     this.setPrices = setPrices;
     this.prices = {};
     this.socket = new WebSocket(

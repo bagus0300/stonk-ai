@@ -5,9 +5,9 @@ import axios from "axios";
 
 import {
   PriceData,
-  TradeData,
+  LiveTradeData,
   DEFAULT_PRICE_DATA,
-  DEFAULT_TRADE_DATA,
+  DEFAULT_LIVE_TRADE_DATA,
 } from "@/src/types/Stock";
 import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/PriceUtils";
 import { dateToISOString } from "@/src/utils/DateUtils";
@@ -32,10 +32,23 @@ const StockModal: React.FC<StockModalProps> = ({
   const [stockDataMap, setStockDataMap] = useState(
     new Map<string, PriceData[]>()
   );
-  const [latestTrade, setlatestTrade] = useState<TradeData>(DEFAULT_TRADE_DATA);
+  const [latestTrade, setlatestTrade] = useState<LiveTradeData>(DEFAULT_LIVE_TRADE_DATA);
   const [currPriceData, setCurrPriceData] =
     useState<PriceData>(DEFAULT_PRICE_DATA);
   const wsManagerRef = useRef<WebSocketManager | null>(null);
+
+  const getCurrTickerData = () => {
+    return stockDataMap.get(ticker) || [];
+  };
+
+  const getPriceDataRange = () => {
+    const tickerData = getCurrTickerData();
+    const priceDateRange = tickerData.filter((priceData) => {
+      const date = new Date(priceData.date);
+      return date >= startDate && date <= new Date();
+    });
+    return priceDateRange;
+  };
 
   useEffect(() => {
     const fetchStockPrices = async () => {
@@ -74,20 +87,32 @@ const StockModal: React.FC<StockModalProps> = ({
     };
 
     if (isOpen) {
-      fetchStockPrices();
+      const tickerStockData = getCurrTickerData();
+      // Fetch price data on intial load
+      if (tickerStockData.length === 0) {
+        fetchStockPrices();
+      }
+      // Fetch uncached price data
+      else {
+        const earliestData = new Date(tickerStockData[0].date);
+        if (startDate < earliestData) {
+          fetchStockPrices();
+        }
+      }
     }
   }, [ticker, startDate]);
 
   useEffect(() => {
-    const tickerData = stockDataMap.get(ticker);
-    if (tickerData && tickerData.length > 0) {
+    const tickerData = getCurrTickerData();
+    if (tickerData.length > 0) {
+      // Record the most recent closing price
       const mostRecentData = tickerData[tickerData.length - 1];
       setCurrPriceData(mostRecentData);
     }
   }, [stockDataMap, ticker]);
 
   useEffect(() => {
-    const updateTrade = (updatedPrices: Record<string, TradeData>) => {
+    const updateTrade = (updatedPrices: Record<string, LiveTradeData>) => {
       const latestTradeData = updatedPrices[ticker];
       setlatestTrade(latestTradeData);
     };
@@ -227,10 +252,7 @@ const StockModal: React.FC<StockModalProps> = ({
               {`At close on ${currPriceData.date}`}
             </p>
           </div>
-          <LineChart
-            ticker={ticker}
-            priceData={stockDataMap.get(ticker) || []}
-          />
+          <LineChart ticker={ticker} priceData={getPriceDataRange()} />
           <div className="flex justify-center ">
             <div className="w-4/5 sm:w-1/2">
               <DataTable
