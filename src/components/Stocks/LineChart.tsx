@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { scaleTime } from "d3-scale";
 import { format } from "d3-format";
@@ -25,6 +27,21 @@ interface LineChartProps {
 
 const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
   const { theme } = useTheme();
+  const [chartWidth, setChartWidth] = useState(600);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Min width of 400 and max width of 800
+      const newWidth = Math.max(400, Math.min(window.innerWidth - 300, 600));
+      setChartWidth(newWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const getChartColors = () => {
     let axisColor = theme === "light" ? "black" : "white";
@@ -61,7 +78,7 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
       <ChartCanvas
         height={400}
         ratio={1}
-        width={600}
+        width={chartWidth}
         margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
         seriesName={ticker}
         data={priceData}
@@ -72,7 +89,7 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
           xAccessor(priceData[priceData.length - 1]),
         ]}
         disableZoom={true}
-        disablePan={true}
+        disablePan={false}
       >
         <Chart id={1} yExtents={(d: PriceData) => [d.close]}>
           <XAxis
@@ -81,9 +98,9 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
             tickLabelFill={axisColor}
             tickStrokeStyle={axisColor}
             strokeStyle={axisColor}
-            ticks={6}
             gridLinesStrokeDasharray="Solid"
             gridLinesStrokeStyle="#e0e0e0"
+            ticks={6}
           />
           <YAxis
             axisAt="left"
