@@ -1,19 +1,24 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
-import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+
+import {
+  SearchContext,
+  SearchContextProps,
+} from "@/src/providers/SearchProvider";
 import NavLink from "@/src/components/Navbar/NavLink";
 import SearchBar from "@/src/components/Navbar/SearchBar";
 import ThemeToggle from "@/src/components/Navbar/ThemeToggle";
-import Image from "next/image";
-import Logo from "../../app/logo.png";
+import LightLogo from "../../app/assets/light_logo.png";
+import DarkLogo from "../../app/assets/dark_logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedNavLink, setSelectedNavLink] = useState("News");
   const [results, setResults] = useState("");
-  const { updateSearchQuery } = useContext(
-    SearchContext
-  ) as SearchContextProps;
+  const { updateSearchQuery } = useContext(SearchContext) as SearchContextProps;
+  const { theme } = useTheme();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -26,7 +31,19 @@ const Navbar = () => {
   return (
     <nav className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 mt-5">
       <div className="flex items-center space-x-1 rtl:space-x-reverse">
-      <Image src={Logo} className="h-12 w-12 sm:h-20 sm:w-20" alt="Logo" />
+        {theme == "light" ? (
+          <Image
+            src={LightLogo}
+            className="h-10 w-10 sm:h-12 sm:w-12 mb-3"
+            alt="Logo"
+          />
+        ) : (
+          <Image
+            src={DarkLogo}
+            className="h-10 w-10 sm:h-12 sm:w-12 mb-3"
+            alt="Logo"
+          />
+        )}
         <span className="self-center text-2xl md:text-3xl sm:text-2xl font-semibold whitespace-nowrap">
           Sentiment News
         </span>
@@ -39,7 +56,6 @@ const Navbar = () => {
         <div className="relative hidden md:block">
           <SearchBar setResults={setResults} />
         </div>
-
         <button
           data-collapse-toggle="navbar-search"
           type="button"
