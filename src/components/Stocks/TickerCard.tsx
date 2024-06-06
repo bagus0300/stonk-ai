@@ -14,35 +14,42 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
     null
   );
   const [quoteInfo, setQuoteInfo] = useState<QuoteInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [fetchSuccess, setFetchSuccess] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`/api/stock/company_profile/?ticker=${ticker}`)
-      .then((response) => {
+    const fetchCompanyProfile = async () => {
+      try {
+        const response = await axios.get(
+          `/api/stock/company_profile/?ticker=${ticker}`
+        );
         setCompanyProfile(response.data.company_profile);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching company profile:", error);
         setCompanyProfile(null);
         setFetchSuccess(false);
-      });
+      }
+    };
+
+    if (ticker) {
+      fetchCompanyProfile();
+    }
   }, [ticker]);
 
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`/api/stock/quote/?ticker=${ticker}`)
-      .then((response) => {
+    const fetchQuoteInfo = async () => {
+      try {
+        const response = await axios.get(`/api/stock/quote/?ticker=${ticker}`);
         setQuoteInfo(response.data.quoteInfo);
-      })
-      .catch((error) => {
-        console.error("Error fetching company profile:", error);
+      } catch (error) {
+        console.error("Error fetching quote info:", error);
         setQuoteInfo(null);
-      });
-  }, []);
+      }
+    };
+
+    if (ticker) {
+      fetchQuoteInfo();
+    }
+  }, [ticker]);
 
   if (!fetchSuccess) {
     return null;
