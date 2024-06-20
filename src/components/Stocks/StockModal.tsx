@@ -114,6 +114,7 @@ const StockModal: React.FC<StockModalProps> = ({
   useEffect(() => {
     const updateTrade = (updatedPrices: Record<string, LiveTradeData>) => {
       const latestTradeData = updatedPrices[ticker];
+      // console.log(latestTrade)
       setlatestTrade(latestTradeData);
     };
 
@@ -131,12 +132,12 @@ const StockModal: React.FC<StockModalProps> = ({
     }
 
     // Close connection on dismount
-    return () => {
-      if (wsManagerRef.current) {
-        wsManagerRef.current.disconnect();
-        wsManagerRef.current = null;
-      }
-    };
+    // return () => {
+    //   if (wsManagerRef.current) {
+    //     wsManagerRef.current.disconnect();
+    //     wsManagerRef.current = null;
+    //   }
+    // };
   }, [isOpen, ticker]);
 
   useEffect(() => {

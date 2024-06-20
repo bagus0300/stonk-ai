@@ -29,9 +29,9 @@ export interface PriceData {
 }
 
 export interface LiveTradeData {
-  price: number;
-  time: number;
-  volume: number;
+  p: number;
+  t: number;
+  v: number;
 }
 
 export interface QuoteInfo {
@@ -74,7 +74,7 @@ export const DEFAULT_PRICE_DATA: PriceData = {
 };
 
 export const DEFAULT_LIVE_TRADE_DATA: LiveTradeData = {
-  price: 0,
-  time: 0,
-  volume: 0,
+  p: 0,
+  t: 0,
+  v: 0,
 };
