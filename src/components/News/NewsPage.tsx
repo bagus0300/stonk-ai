@@ -7,7 +7,7 @@ import {
   SearchContext,
   SearchContextProps,
 } from "@/src/providers/SearchProvider";
-import { getDateDaysBefore } from "@/src/utils/DateUtils";
+import { getDateDaysBefore } from "@/src/utils/dateUtils";
 import Card from "@/src/components/News/Card";
 import Loader from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";

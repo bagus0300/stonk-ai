@@ -9,8 +9,8 @@ import {
   DEFAULT_PRICE_DATA,
   DEFAULT_LIVE_TRADE_DATA,
 } from "@/src/types/Stock";
-import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/PriceUtils";
-import { dateToISOString } from "@/src/utils/DateUtils";
+import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/priceUtils";
+import { dateToISOString } from "@/src/utils/dateUtils";
 import WebSocketManager from "@/src/websocket/SocketManager";
 import LineChart from "@/src/components/Stocks/LineChart";
 import DataTable from "@/src/components/Stocks/DataTable";
@@ -32,7 +32,9 @@ const StockModal: React.FC<StockModalProps> = ({
   const [stockDataMap, setStockDataMap] = useState(
     new Map<string, PriceData[]>()
   );
-  const [latestTrade, setlatestTrade] = useState<LiveTradeData>(DEFAULT_LIVE_TRADE_DATA);
+  const [latestTrade, setlatestTrade] = useState<LiveTradeData>(
+    DEFAULT_LIVE_TRADE_DATA
+  );
   const [currPriceData, setCurrPriceData] =
     useState<PriceData>(DEFAULT_PRICE_DATA);
   const wsManagerRef = useRef<WebSocketManager | null>(null);
@@ -112,20 +114,11 @@ const StockModal: React.FC<StockModalProps> = ({
   }, [stockDataMap, ticker]);
 
   useEffect(() => {
-    const updateTrade = (updatedPrices: Record<string, LiveTradeData>) => {
-      const latestTradeData = updatedPrices[ticker];
-      // console.log(latestTrade)
-      setlatestTrade(latestTradeData);
-    };
-
     if (isOpen) {
       // Intialize a new connection when the modal opens
-      if (!wsManagerRef.current) {
-        wsManagerRef.current = new WebSocketManager(updateTrade);
-        wsManagerRef.current.addSubListener([ticker]);
-      } else {
-        wsManagerRef.current.addSubListener([ticker]);
-      }
+      const wsManager = WebSocketManager.getInstance();
+      wsManager.addSubListener([ticker]);
+      wsManager.get_latest_trade(ticker);
     } else if (wsManagerRef.current) {
       // Unsubscribe when modal closes
       wsManagerRef.current.unsubscribe([ticker]);

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Article } from "@/src/types/Article";
-import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/PriceUtils";
+import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/priceUtils";
 
 const Card: React.FC<Article> = ({
   title,

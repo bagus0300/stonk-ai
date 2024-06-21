@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { CompanyProfile, QuoteInfo } from "@/src/types/Stock";
-import { getPriceDiffStr } from "@/src/utils/PriceUtils";
+import { getPriceDiffStr } from "@/src/utils/priceUtils";
 
 interface TickerCardProps {
   ticker: string;
