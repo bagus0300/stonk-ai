@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useTheme } from "next-themes";
 import axios from "axios";
@@ -37,7 +37,6 @@ const StockModal: React.FC<StockModalProps> = ({
   );
   const [currPriceData, setCurrPriceData] =
     useState<PriceData>(DEFAULT_PRICE_DATA);
-  const wsManagerRef = useRef<WebSocketManager | null>(null);
 
   const getCurrTickerData = () => {
     return stockDataMap.get(ticker) || [];
@@ -114,23 +113,19 @@ const StockModal: React.FC<StockModalProps> = ({
   }, [stockDataMap, ticker]);
 
   useEffect(() => {
+    const fetchLatestTrade = (wsManager: WebSocketManager) => {
+      const latestTrade = wsManager.getLatestTrade(ticker);
+      console.log(latestTrade)
+      setlatestTrade(latestTrade);
+    };
     if (isOpen) {
-      // Intialize a new connection when the modal opens
       const wsManager = WebSocketManager.getInstance();
       wsManager.addSubListener([ticker]);
-      wsManager.get_latest_trade(ticker);
-    } else if (wsManagerRef.current) {
-      // Unsubscribe when modal closes
-      wsManagerRef.current.unsubscribe([ticker]);
-    }
-
-    // Close connection on dismount
-    // return () => {
-    //   if (wsManagerRef.current) {
-    //     wsManagerRef.current.disconnect();
-    //     wsManagerRef.current = null;
-    //   }
-    // };
+      setInterval(() => fetchLatestTrade(wsManager!), 5000);
+    } 
+    // else {
+    //   wsManager.unsubscribe(ticker);
+    // }
   }, [isOpen, ticker]);
 
   useEffect(() => {
