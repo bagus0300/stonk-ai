@@ -16,14 +16,16 @@ import LineChart from "@/src/components/Stocks/LineChart";
 import DataTable from "@/src/components/Stocks/DataTable";
 
 interface StockModalProps {
-  isOpen: boolean;
+  company: string;
   ticker: string;
+  isOpen: boolean;
   handleClose: () => void;
 }
 
 const StockModal: React.FC<StockModalProps> = ({
-  isOpen,
+  company,
   ticker,
+  isOpen,
   handleClose,
 }) => {
   const { theme } = useTheme();
@@ -185,7 +187,7 @@ const StockModal: React.FC<StockModalProps> = ({
           style={{ backgroundColor: theme === "light" ? "white" : "black" }}
         >
           <div className="flex items-center justify-between p-4 md:p-5 border-b dark:border-gray-600">
-            <h3 className="text-xl font-semibold ">{ticker}</h3>
+            <h3 className="text-xl font-semibold ">{company} ({ticker})</h3>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white hover:text-gray-900 font-bold rounded-lg text-xl ml-5 w-10 h-10 ms-auto inline-flex justify-center items-center"

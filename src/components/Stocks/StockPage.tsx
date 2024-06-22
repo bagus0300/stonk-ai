@@ -22,6 +22,7 @@ const StocksPage = () => {
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const [currCompany, setCurrCompany] = useState("");
   const [currTicker, setCurrTicker] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { searchQuery } = useContext(SearchContext) as SearchContextProps;
@@ -98,8 +99,9 @@ const StocksPage = () => {
     }, 2000);
   };
 
-  const handleOpenModal = (ticker: string) => {
+  const handleOpenModal = (company: string, ticker: string) => {
     setIsOpen(true);
+    setCurrCompany(company);
     setCurrTicker(ticker);
   };
 
@@ -130,7 +132,9 @@ const StocksPage = () => {
               {filteredStockInfo.slice(0, page * PAGE_SIZE).map((stock) => (
                 <div
                   key={stock.symbol}
-                  onClick={() => handleOpenModal(stock.symbol)}
+                  onClick={() =>
+                    handleOpenModal(stock.description, stock.symbol)
+                  }
                 >
                   <TickerCard ticker={stock.symbol} />
                 </div>
@@ -149,8 +153,9 @@ const StocksPage = () => {
         </div>
       </div>
       <StockModal
-        isOpen={isOpen}
+        company={currCompany}
         ticker={currTicker}
+        isOpen={isOpen}
         handleClose={handleCloseModal}
       />
     </>
