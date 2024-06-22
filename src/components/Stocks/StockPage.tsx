@@ -39,7 +39,7 @@ const StocksPage = () => {
       }
     };
 
-    const fetchStockTicker = async () => {
+    const fetchTickerList = async () => {
       try {
         const response = await axios.get("/api/stock/ticker");
         setTickerOptions(response.data.tickers);
@@ -47,9 +47,8 @@ const StocksPage = () => {
         console.error("Error fetching tickers:", error);
       }
     };
-
     fetchStockExchange();
-    fetchStockTicker();
+    fetchTickerList();
   }, []);
 
   useEffect(() => {

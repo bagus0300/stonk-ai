@@ -114,14 +114,15 @@ const NewsDisplay = () => {
   }, [selectedSentiment, selectedPriceAction, searchQuery, selectedDateRange]);
 
   useEffect(() => {
-    axios
-      .get("/api/stock/ticker")
-      .then((response) => {
+    const fetchTickerList = async () => {
+      try {
+        const response = await axios.get("/api/stock/ticker");
         setTickerOptions(response.data.tickers);
-      })
-      .catch((error) => {
-        console.error("Error fetching tickers: ", error);
-      });
+      } catch (error) {
+        console.error("Error fetching tickers:", error);
+      }
+    };
+    fetchTickerList();
   }, []);
 
   return (
