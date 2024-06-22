@@ -9,7 +9,7 @@ import {
   DEFAULT_PRICE_DATA,
   DEFAULT_LIVE_TRADE_DATA,
 } from "@/src/types/Stock";
-import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/priceUtils";
+import { getPriceColorStr, getPriceDiffStr, getPercentChangeStr } from "@/src/utils/priceUtils";
 import { dateToISOString } from "@/src/utils/dateUtils";
 import WebSocketManager from "@/src/websocket/SocketManager";
 import LineChart from "@/src/components/Stocks/LineChart";
@@ -212,9 +212,10 @@ const StockModal: React.FC<StockModalProps> = ({ company, ticker, isOpen, handle
             <div className="flex space-x-3">
               <p className="text-xl font-semibold">{`${currPriceData.close}`}</p>
               <p
-                className={`text-lg font-semibold ${
-                  currPriceData.priceDifference >= 0 ? "text-green-500" : "text-red-500"
-                }`}
+                className={`text-lg font-semibold text-${getPriceColorStr(
+                  currPriceData.open,
+                  currPriceData.close
+                )}`}
               >
                 {getPriceDiffStr(currPriceData.open, currPriceData.close)}
                 <span>

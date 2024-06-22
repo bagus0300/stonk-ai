@@ -16,8 +16,6 @@ export interface PriceData {
   high: number;
   low: number;
   close: number;
-  priceDifference: number;
-  percentChange: number;
   volume: number;
   adjOpen: number;
   adjHigh: number;
@@ -61,8 +59,6 @@ export const DEFAULT_PRICE_DATA: PriceData = {
   high: 0,
   low: 0,
   close: 0,
-  priceDifference: 0,
-  percentChange: 0,
   volume: 0,
   adjOpen: 0,
   adjHigh: 0,

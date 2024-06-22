@@ -56,7 +56,7 @@ const StockHeader = () => {
             </div>
           </div>
           {quoteInfo && quoteInfo[ticker] && (
-            <div className={`${getPriceColorStr(quoteInfo[ticker].o, quoteInfo[ticker].c)}`}>
+            <div className={`text-${getPriceColorStr(quoteInfo[ticker].o, quoteInfo[ticker].c)}`}>
               {getPriceStrArrow(quoteInfo[ticker].o, quoteInfo[ticker].c)}
             </div>
           )}

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Article } from "@/src/types/Article";
-import { getPriceDiffStr, getPercentChangeStr } from "@/src/utils/priceUtils";
+import { getPriceColorStr, getPriceStrArrow } from "@/src/utils/priceUtils";
 
 const Card: React.FC<Article> = ({
   title,
@@ -76,18 +76,8 @@ const Card: React.FC<Article> = ({
           <div className="flex flex-row space-x-4">
             <p>O: {open_price}</p>
             <p>C: {close_price}</p>
-            <p
-              className={`${
-                open_price < close_price
-                  ? "text-green-500"
-                  : open_price > close_price
-                  ? "text-red-500"
-                  : ""
-              }`}
-            >
-              {open_price < close_price ? "▲" : open_price > close_price ? "▼" : ""}
-              {getPriceDiffStr(open_price, close_price)} (
-              {getPercentChangeStr(open_price, close_price)})
+            <p className={`text-${getPriceColorStr(open_price, close_price)}`}>
+              {getPriceStrArrow(open_price, close_price)}
             </p>
           </div>
         ) : (

@@ -16,6 +16,7 @@ import {
   HoverTooltip,
 } from "react-financial-charts";
 
+import { getPriceDiff } from "@/src/utils/priceUtils";
 import { PriceData } from "@/src/types/Stock";
 import TooltipContent from "@/src/components/Stocks/Tooltip";
 import Loader from "@/src/components/units/Loader";
@@ -49,7 +50,10 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
     let priceFillColor = "rgba(255, 100, 100, 0.2)";
 
     if (priceData.length > 0) {
-      const priceDiff = priceData[priceData.length - 1].close - priceData[0].close;
+      const priceDiff = getPriceDiff(
+        priceData[priceData.length - 1].open,
+        priceData[priceData.length - 1].close
+      );
 
       if (priceDiff > 0) {
         if (theme === "light") {

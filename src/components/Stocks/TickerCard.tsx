@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { CompanyProfile, QuoteInfo } from "@/src/types/Stock";
-import { getPriceDiffStr } from "@/src/utils/priceUtils";
+import { getPriceColorStr, getPriceDiffStr } from "@/src/utils/priceUtils";
 
 interface TickerCardProps {
   ticker: string;
@@ -69,9 +69,10 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
             <div className="flex flex-col items-center text-sm p-2 font-bold">
               <p>{quoteInfo.c.toFixed(2)}</p>
               <p
-                className={`inline-block rounded text-white ${
-                  quoteInfo.c > quoteInfo.o ? "bg-green-500" : "bg-red-500"
-                } px-2 py-1`}
+                className={`inline-block  px-2 py-1 rounded text-white bg-${getPriceColorStr(
+                  quoteInfo.o,
+                  quoteInfo.c
+                )}`}
               >
                 {getPriceDiffStr(quoteInfo.o, quoteInfo.c)}
               </p>
