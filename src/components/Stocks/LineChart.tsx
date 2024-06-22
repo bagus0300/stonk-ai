@@ -31,7 +31,7 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Min width of 400 and max width of 800
+      // Min width of 400 and max width of 600
       const newWidth = Math.max(400, Math.min(window.innerWidth - 300, 600));
       setChartWidth(newWidth);
     };
@@ -49,8 +49,7 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
     let priceFillColor = "rgba(255, 100, 100, 0.2)";
 
     if (priceData.length > 0) {
-      const priceDiff =
-        priceData[priceData.length - 1].close - priceData[0].close;
+      const priceDiff = priceData[priceData.length - 1].close - priceData[0].close;
 
       if (priceDiff > 0) {
         if (theme === "light") {
@@ -84,10 +83,7 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
         data={priceData}
         xScale={scaleTime()}
         xAccessor={xAccessor}
-        xExtents={[
-          xAccessor(priceData[0]),
-          xAccessor(priceData[priceData.length - 1]),
-        ]}
+        xExtents={[xAccessor(priceData[0]), xAccessor(priceData[priceData.length - 1])]}
         disableZoom={true}
         disablePan={false}
       >
@@ -117,16 +113,8 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
             strokeStyle={priceLineColor}
             fillStyle={priceFillColor}
           />
-          <MouseCoordinateX
-            at="bottom"
-            orient="bottom"
-            displayFormat={timeFormat("%Y-%m-%d")}
-          />
-          <MouseCoordinateY
-            at="right"
-            orient="right"
-            displayFormat={format(".2f")}
-          />
+          <MouseCoordinateX at="bottom" orient="bottom" displayFormat={timeFormat("%Y-%m-%d")} />
+          <MouseCoordinateY at="right" orient="right" displayFormat={format(".2f")} />
           <HoverTooltip
             yAccessor={(d) => d.close}
             tooltip={TooltipContent}

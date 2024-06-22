@@ -38,9 +38,9 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   };
 
   const handleSubmitClick = () => {
-    handleSubmit()
-    handleToggleDropdown()
-  }
+    handleSubmit();
+    handleToggleDropdown();
+  };
 
   return (
     <div className="w-1/4 relative">
@@ -68,9 +68,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               <div
                 key={name}
                 className={`flex items-center  ${
-                  name.toLowerCase().includes(filter.toLowerCase())
-                    ? "flex"
-                    : "hidden"
+                  name.toLowerCase().includes(filter.toLowerCase()) ? "flex" : "hidden"
                 }`}
               >
                 <input

@@ -60,28 +60,18 @@ const Card: React.FC<Article> = ({
   return (
     <div className="flex-shrink-0 shadow-md border dark:border-white rounded-lg overflow-hidden flex p-4">
       <div className="w-full p-4">
-        <img
-          src={image_url}
-          alt={title}
-          className="w-full h-60 object-cover mb-3 rounded-lg"
-        />
+        <img src={image_url} alt={title} className="w-full h-60 object-cover mb-3 rounded-lg" />
         <p className="italic mb-2">{publication_datetime}</p>
         <h2 className="text-xl font-bold mb-2">{title}</h2>
         <div className="flex flex-row space-x-4">
           <p className="text-red-400 text-xl font-bold mb-2">{ticker}</p>
-          <p
-            className={`text-xl font-semibold ${getSentimentColorClass(
-              sentiment
-            )}`}
-          >
+          <p className={`text-xl font-semibold ${getSentimentColorClass(sentiment)}`}>
             {sentiment}
           </p>
         </div>
         <p>{truncateSummary(summary, 300)}</p>
 
-        <h1 className="italic mt-4 text-lg mb-2">
-          Price Action On: {market_date}
-        </h1>
+        <h1 className="italic mt-4 text-lg mb-2">Price Action On: {market_date}</h1>
         {open_price ? (
           <div className="flex flex-row space-x-4">
             <p>O: {open_price}</p>
@@ -95,11 +85,7 @@ const Card: React.FC<Article> = ({
                   : ""
               }`}
             >
-              {open_price < close_price
-                ? "▲"
-                : open_price > close_price
-                ? "▼"
-                : ""}
+              {open_price < close_price ? "▲" : open_price > close_price ? "▼" : ""}
               {getPriceDiffStr(open_price, close_price)} (
               {getPercentChangeStr(open_price, close_price)})
             </p>

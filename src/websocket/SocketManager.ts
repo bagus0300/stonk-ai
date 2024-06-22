@@ -11,9 +11,7 @@ class WebSocketManager {
       `wss://ws.finnhub.io?token=${process.env.NEXT_PUBLIC_FINNHUB_KEY_4}`
     );
     this.socket.addEventListener("message", this.messageHandler);
-    this.socket.addEventListener("error", (error) =>
-      console.error("WebSocket error:", error)
-    );
+    this.socket.addEventListener("error", (error) => console.error("WebSocket error:", error));
   }
 
   static getInstance() {

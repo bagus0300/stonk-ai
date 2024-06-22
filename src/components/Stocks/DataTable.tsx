@@ -19,9 +19,7 @@ interface DataTableProps {
 
 const TableBody: React.FC<TableBodyProps> = ({ children }) => {
   return (
-    <table className="table-fixed w-full border-collapse border border-gray-300">
-      {children}
-    </table>
+    <table className="table-fixed w-full border-collapse border border-gray-300">{children}</table>
   );
 };
 
@@ -34,10 +32,7 @@ const TableColumn: React.FC<TableColumnProps> = ({ label, value }) => {
   );
 };
 
-const DataTable: React.FC<DataTableProps> = ({
-  currPriceData,
-  latestTradeData,
-}) => {
+const DataTable: React.FC<DataTableProps> = ({ currPriceData, latestTradeData }) => {
   return (
     <div className="p-4">
       <h2 className="font-bold mb-2">Latest Trade</h2>

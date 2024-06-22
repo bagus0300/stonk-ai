@@ -6,13 +6,9 @@ export interface SearchContextProps {
   updateSearchQuery: (query: string) => void;
 }
 
-export const SearchContext = createContext<SearchContextProps | undefined>(
-  undefined
-);
+export const SearchContext = createContext<SearchContextProps | undefined>(undefined);
 
-export const SearchProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const updateSearchQuery = (query: string) => {

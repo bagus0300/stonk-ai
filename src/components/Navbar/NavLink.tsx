@@ -6,11 +6,7 @@ interface NavLinkProps {
   setSelectedNavLink: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({
-  href,
-  name,
-  setSelectedNavLink,
-}) => {
+const NavLink: React.FC<NavLinkProps> = ({ href, name, setSelectedNavLink }) => {
   const handleClick = () => {
     setSelectedNavLink(name);
   };

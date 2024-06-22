@@ -26,7 +26,7 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
     } else {
       setSelectedOption(key);
     }
-    handleToggleDropdown()
+    handleToggleDropdown();
   };
 
   return (
@@ -35,9 +35,7 @@ const SingleSelectDropdown: React.FC<SingleSelectDropdownProps> = ({
         onClick={handleToggleDropdown}
         className="p-3 text-xs lg:text-base rounded-3xl flex items-center gap-2 border border-neutral-300 cursor-pointer truncate h-10 bg-white text-black relative"
       >
-        {selectedOption !== null
-          ? originalOptions.get(selectedOption)
-          : placeholder}
+        {selectedOption !== null ? originalOptions.get(selectedOption) : placeholder}
         <div className="hidden md:inline-block ml-auto">
           <MdKeyboardDoubleArrowDown />
         </div>

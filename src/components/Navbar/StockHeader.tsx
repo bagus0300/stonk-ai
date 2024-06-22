@@ -27,9 +27,7 @@ const StockHeader = () => {
         await Promise.all(
           tickerList.map(async (ticker) => {
             try {
-              const response = await axios.get(
-                `/api/stock/quote/?ticker=${ticker}`
-              );
+              const response = await axios.get(`/api/stock/quote/?ticker=${ticker}`);
               fetchedQuoteInfo[ticker] = response.data.quoteInfo;
             } catch (error) {
               console.error(`Error fetching quote info for ${ticker}:`, error);
@@ -54,18 +52,11 @@ const StockHeader = () => {
           <div className="flex justify-between items-center">
             <div className="font-bold">{ticker}</div>
             <div className="text-right">
-              {quoteInfo && quoteInfo[ticker]
-                ? `${quoteInfo[ticker].c}`
-                : "Loading..."}
+              {quoteInfo && quoteInfo[ticker] ? `${quoteInfo[ticker].c}` : "Loading..."}
             </div>
           </div>
           {quoteInfo && quoteInfo[ticker] && (
-            <div
-              className={`${getPriceColorStr(
-                quoteInfo[ticker].o,
-                quoteInfo[ticker].c
-              )}`}
-            >
+            <div className={`${getPriceColorStr(quoteInfo[ticker].o, quoteInfo[ticker].c)}`}>
               {getPriceStrArrow(quoteInfo[ticker].o, quoteInfo[ticker].c)}
             </div>
           )}

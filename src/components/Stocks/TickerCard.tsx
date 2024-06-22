@@ -10,18 +10,14 @@ interface TickerCardProps {
 }
 
 const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
-  const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(
-    null
-  );
+  const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null);
   const [quoteInfo, setQuoteInfo] = useState<QuoteInfo | null>(null);
   const [fetchSuccess, setFetchSuccess] = useState(true);
 
   useEffect(() => {
     const fetchCompanyProfile = async () => {
       try {
-        const response = await axios.get(
-          `/api/stock/company_profile/?ticker=${ticker}`
-        );
+        const response = await axios.get(`/api/stock/company_profile/?ticker=${ticker}`);
         setCompanyProfile(response.data.company_profile);
       } catch (error) {
         console.error("Error fetching company profile:", error);
@@ -66,8 +62,7 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
           />
           <div className="flex-grow">
             <p className="text-sm">
-              {companyProfile.ticker} - {companyProfile.name} -{" "}
-              {companyProfile.exchange}
+              {companyProfile.ticker} - {companyProfile.name} - {companyProfile.exchange}
             </p>
           </div>
           {quoteInfo && (

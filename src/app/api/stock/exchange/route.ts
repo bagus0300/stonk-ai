@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 import { StockInfo } from "@/src/types/Stock";
 

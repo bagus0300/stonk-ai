@@ -3,10 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
-import {
-  SearchContext,
-  SearchContextProps,
-} from "@/src/providers/SearchProvider";
+import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
 import NavLink from "@/src/components/Navbar/NavLink";
 import SearchBar from "@/src/components/Navbar/SearchBar";
 import StockHeader from "@/src/components/Navbar/StockHeader";
@@ -35,17 +32,9 @@ const Navbar = () => {
       <nav className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 mt-5">
         <div className="flex items-center space-x-1 rtl:space-x-reverse">
           {theme == "light" ? (
-            <Image
-              src={LightLogo}
-              className="h-10 w-10 sm:h-12 sm:w-12 mb-3"
-              alt="Logo"
-            />
+            <Image src={LightLogo} className="h-10 w-10 sm:h-12 sm:w-12 mb-3" alt="Logo" />
           ) : (
-            <Image
-              src={DarkLogo}
-              className="h-10 w-10 sm:h-12 sm:w-12 mb-3"
-              alt="Logo"
-            />
+            <Image src={DarkLogo} className="h-10 w-10 sm:h-12 sm:w-12 mb-3" alt="Logo" />
           )}
           <span className="self-center text-2xl md:text-3xl sm:text-2xl font-semibold whitespace-nowrap">
             Sentiment News
@@ -94,21 +83,9 @@ const Navbar = () => {
             <SearchBar setResults={setResults} />
           </div>
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
-            <NavLink
-              name={"News"}
-              href={"/"}
-              setSelectedNavLink={setSelectedNavLink}
-            />
-            <NavLink
-              name={"Stocks"}
-              href={"/stocks"}
-              setSelectedNavLink={setSelectedNavLink}
-            />
-            <NavLink
-              name={"About"}
-              href={"#"}
-              setSelectedNavLink={setSelectedNavLink}
-            />
+            <NavLink name={"News"} href={"/"} setSelectedNavLink={setSelectedNavLink} />
+            <NavLink name={"Stocks"} href={"/stocks"} setSelectedNavLink={setSelectedNavLink} />
+            <NavLink name={"About"} href={"#"} setSelectedNavLink={setSelectedNavLink} />
           </ul>
         </div>
       </nav>

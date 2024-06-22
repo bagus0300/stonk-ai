@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import utc from 'dayjs/plugin/utc.js'
-import timezone from 'dayjs/plugin/timezone';
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone";
 
-dayjs.extend(utc)
+dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export const dateToISOString = (date: Date) => dayjs(date).format("YYYY-MM-DD");
@@ -15,5 +15,5 @@ export const getDateDaysBefore = (days_duration: number) => {
 
 export const unixToLocal = (unixTime: number): string => {
   const dateObject = dayjs(unixTime);
-  return dateObject.tz('UTC').format('YYYY-MM-DD HH:mm:ss Z')
+  return dateObject.tz("UTC").format("YYYY-MM-DD HH:mm:ss Z");
 };

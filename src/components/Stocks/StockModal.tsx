@@ -22,23 +22,13 @@ interface StockModalProps {
   handleClose: () => void;
 }
 
-const StockModal: React.FC<StockModalProps> = ({
-  company,
-  ticker,
-  isOpen,
-  handleClose,
-}) => {
+const StockModal: React.FC<StockModalProps> = ({ company, ticker, isOpen, handleClose }) => {
   const { theme } = useTheme();
   const [selectedRange, setSelectedRange] = useState("YTD");
   const [startDate, setStartDate] = useState(new Date());
-  const [stockDataMap, setStockDataMap] = useState(
-    new Map<string, PriceData[]>()
-  );
-  const [latestTrade, setlatestTrade] = useState<LiveTradeData>(
-    DEFAULT_LIVE_TRADE_DATA
-  );
-  const [currPriceData, setCurrPriceData] =
-    useState<PriceData>(DEFAULT_PRICE_DATA);
+  const [stockDataMap, setStockDataMap] = useState(new Map<string, PriceData[]>());
+  const [latestTrade, setlatestTrade] = useState<LiveTradeData>(DEFAULT_LIVE_TRADE_DATA);
+  const [currPriceData, setCurrPriceData] = useState<PriceData>(DEFAULT_PRICE_DATA);
 
   const getCurrTickerData = () => {
     return stockDataMap.get(ticker) || [];
@@ -117,14 +107,13 @@ const StockModal: React.FC<StockModalProps> = ({
   useEffect(() => {
     const fetchLatestTrade = (wsManager: WebSocketManager) => {
       const latestTrade = wsManager.getLatestTrade(ticker);
-      console.log(latestTrade)
       setlatestTrade(latestTrade);
     };
     if (isOpen) {
       const wsManager = WebSocketManager.getInstance();
       wsManager.addSubListener([ticker]);
       setInterval(() => fetchLatestTrade(wsManager!), 5000);
-    } 
+    }
     // else {
     //   wsManager.unsubscribe(ticker);
     // }
@@ -187,7 +176,9 @@ const StockModal: React.FC<StockModalProps> = ({
           style={{ backgroundColor: theme === "light" ? "white" : "black" }}
         >
           <div className="flex items-center justify-between p-4 md:p-5 border-b dark:border-gray-600">
-            <h3 className="text-xl font-semibold ">{company} ({ticker})</h3>
+            <h3 className="text-xl font-semibold ">
+              {company} ({ticker})
+            </h3>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white hover:text-gray-900 font-bold rounded-lg text-xl ml-5 w-10 h-10 ms-auto inline-flex justify-center items-center"
@@ -201,9 +192,7 @@ const StockModal: React.FC<StockModalProps> = ({
               <button
                 key={range}
                 className={`relative overflow-hidden py-2 px-4 rounded-lg ${
-                  selectedRange === range
-                    ? "bg-gray-600 text-white"
-                    : "bg-transparent"
+                  selectedRange === range ? "bg-gray-600 text-white" : "bg-transparent"
                 } group`}
                 onClick={() => handleRangeChange(range)}
               >
@@ -221,35 +210,24 @@ const StockModal: React.FC<StockModalProps> = ({
           </div>
           <div className="flex flex-col items-start ml-[12vw] p-4">
             <div className="flex space-x-3">
-              <p className="text-xl font-semibold">
-                {`${currPriceData.close}`}
-              </p>
+              <p className="text-xl font-semibold">{`${currPriceData.close}`}</p>
               <p
                 className={`text-lg font-semibold ${
-                  currPriceData.priceDifference >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
+                  currPriceData.priceDifference >= 0 ? "text-green-500" : "text-red-500"
                 }`}
               >
                 {getPriceDiffStr(currPriceData.open, currPriceData.close)}
                 <span>
-                  {` `}(
-                  {getPercentChangeStr(currPriceData.open, currPriceData.close)}
-                  )
+                  {` `}({getPercentChangeStr(currPriceData.open, currPriceData.close)})
                 </span>
               </p>
             </div>
-            <p className="text-sm mt-1">
-              {`At close on ${currPriceData.date}`}
-            </p>
+            <p className="text-sm mt-1">{`At close on ${currPriceData.date}`}</p>
           </div>
           <LineChart ticker={ticker} priceData={getPriceDataRange()} />
           <div className="flex justify-center ">
             <div className="w-4/5 sm:w-1/2">
-              <DataTable
-                currPriceData={currPriceData}
-                latestTradeData={latestTrade}
-              />
+              <DataTable currPriceData={currPriceData} latestTradeData={latestTrade} />
             </div>
           </div>
         </div>

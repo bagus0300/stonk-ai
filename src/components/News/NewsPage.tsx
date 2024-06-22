@@ -3,10 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import { Article } from "@/src/types/Article";
-import {
-  SearchContext,
-  SearchContextProps,
-} from "@/src/providers/SearchProvider";
+import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
 import { getDateDaysBefore } from "@/src/utils/dateUtils";
 import Card from "@/src/components/News/Card";
 import Loader from "@/src/components/units/Loader";
@@ -15,42 +12,36 @@ import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
 import NextButton from "@/src/components/units/NextButton";
 
 const NewsDisplay = () => {
+  // Article and page info
   const [articles, setArticles] = useState<Article[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
 
+  // Search filters
+  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
   const [tickerOptions, setTickerOptions] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
-  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(
-    null
-  );
-  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(
-    null
-  );
-  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(
-    null
-  );
+  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(null);
+  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(null);
+  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(null);
 
+  // Dropdown options
   const sentimentOptions = new Map<number, string>([
     [0, "Positive"],
     [1, "Negative"],
     [2, "Neutral"],
   ]);
-
   const priceActionOptions = new Map<number, string>([
     [0, "Positive"],
     [1, "Negative"],
     [2, "NA"],
   ]);
-
   const dateRangeOptions = new Map<number, string>([
     [0, "24 hours ago"],
     [1, "3 days ago"],
     [2, "1 week ago"],
   ]);
-
   const dateRanges = new Map<number, string>([
     [0, getDateDaysBefore(1)],
     [1, getDateDaysBefore(2)],
@@ -60,17 +51,10 @@ const NewsDisplay = () => {
   const loadArticles = async (curr_page: number) => {
     try {
       const sentiment =
-        selectedSentiment != null
-          ? sentimentOptions.get(selectedSentiment) || ""
-          : "";
+        selectedSentiment != null ? sentimentOptions.get(selectedSentiment) || "" : "";
       const priceAction =
-        selectedPriceAction != null
-          ? priceActionOptions.get(selectedPriceAction) || ""
-          : "";
-      const endDate =
-        selectedDateRange != null
-          ? dateRanges.get(selectedDateRange) || ""
-          : "";
+        selectedPriceAction != null ? priceActionOptions.get(selectedPriceAction) || "" : "";
+      const endDate = selectedDateRange != null ? dateRanges.get(selectedDateRange) || "" : "";
 
       const queryParams = new URLSearchParams({
         page: curr_page.toString(),
