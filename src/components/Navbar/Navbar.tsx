@@ -2,7 +2,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import axios from "axios";
 
 import {
   SearchContext,
@@ -10,6 +9,7 @@ import {
 } from "@/src/providers/SearchProvider";
 import NavLink from "@/src/components/Navbar/NavLink";
 import SearchBar from "@/src/components/Navbar/SearchBar";
+import StockHeader from "@/src/components/Navbar/StockHeader";
 import ThemeToggle from "@/src/components/Navbar/ThemeToggle";
 import LightLogo from "../../app/assets/light_logo.png";
 import DarkLogo from "../../app/assets/dark_logo.png";
@@ -18,7 +18,6 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedNavLink, setSelectedNavLink] = useState("News");
   const [results, setResults] = useState("");
-  const [tickerList, setTickerList] = useState<string[]>([]);
   const { updateSearchQuery } = useContext(SearchContext) as SearchContextProps;
   const { theme } = useTheme();
 
@@ -30,30 +29,9 @@ const Navbar = () => {
     updateSearchQuery(results);
   }, [results, selectedNavLink]);
 
-  useEffect(() => {
-    const fetchTickerList = async () => {
-      try {
-        const response = await axios.get("/api/stock/ticker");
-        setTickerList(response.data.tickers);
-      } catch (error) {
-        console.error("Error fetching tickers:", error);
-      }
-    };
-    fetchTickerList();
-  }, []);
-
   return (
     <>
-      <div className="flex overflow-x-scroll hide-scrollbar space-x-2 p-2">
-        {tickerList.map((ticker: string) => (
-          <div
-            className="py-2 px-4 rounded shadow-md whitespace-nowrap"
-            key={ticker}
-          >
-            {ticker}
-          </div>
-        ))}
-      </div>
+      <StockHeader />
       <nav className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 mt-5">
         <div className="flex items-center space-x-1 rtl:space-x-reverse">
           {theme == "light" ? (
