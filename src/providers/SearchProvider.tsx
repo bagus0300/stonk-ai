@@ -8,7 +8,7 @@ export interface SearchContextProps {
 
 export const SearchContext = createContext<SearchContextProps | undefined>(undefined);
 
-export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const updateSearchQuery = (query: string) => {
@@ -21,3 +21,5 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     </SearchContext.Provider>
   );
 };
+
+export default SearchProvider;

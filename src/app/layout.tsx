@@ -1,8 +1,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 
-import { ThemeProvider } from "@/src/providers/ThemeProvider";
-import { SearchProvider } from "@/src/providers/SearchProvider";
+import ThemeProvider from "@/src/providers/ThemeProvider";
+import SearchProvider from "@/src/providers/SearchProvider";
 import QueryProvider from "@/src/providers/QueryProvider";
 import Navbar from "@/src/components/Navbar/Navbar";
 
