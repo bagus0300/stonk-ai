@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 
 import { CompanyProfile } from "@/src/types/Stock";
-import { getPriceColorStr, getPriceDiffStr } from "@/src/utils/priceUtils";
+import { getPriceDiffStr } from "@/src/utils/priceUtils";
 import { fetchQuoteInfo } from "@/src/queries/stockQueries";
 
 interface TickerCardProps {
@@ -56,10 +56,9 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
             <div className="flex flex-col items-center text-sm p-2 font-bold">
               <p>{tickerQuote.c.toFixed(2)}</p>
               <p
-                className={`inline-block  px-2 py-1 rounded text-white bg-${getPriceColorStr(
-                  tickerQuote.o,
-                  tickerQuote.c
-                )}`}
+                className={`inline-block px-2 py-1 rounded text-white ${
+                  tickerQuote.o > tickerQuote.c ? "bg-green-500" : "bg-red-500"
+                }`}
               >
                 {getPriceDiffStr(tickerQuote.o, tickerQuote.c)}
               </p>
