@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 
-import Card from "@/src/components/News/Card";
+import NewsCard from "@/src/components/News/NewsCard";
 import Loader from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
@@ -139,7 +139,7 @@ const NewsDisplay = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
               {articles &&
                 articles.map((article: Article, index: number) => (
-                  <Card
+                  <NewsCard
                     key={index}
                     title={article.title}
                     publication_datetime={article.publication_datetime}

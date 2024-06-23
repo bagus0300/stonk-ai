@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import { useQuery } from "react-query";
 
 import { Article } from "@/src/types/Article";
 import { getPriceColorStr, getPriceStrArrow } from "@/src/utils/priceUtils";
+import { fetchSentiments } from "@/src/queries/newsQueries";
 
 const Card: React.FC<Article> = ({
   title,
@@ -17,11 +18,7 @@ const Card: React.FC<Article> = ({
   open_price,
   close_price,
 }) => {
-  const [sentimentOptions, setSentimentOptions] = useState({
-    Positive: new Set(),
-    Negative: new Set(),
-    Neutral: new Set(),
-  });
+  const { data: sentimentOptions } = useQuery("sentiments", fetchSentiments);
 
   const truncateSummary = (text: string, maxLength: number) => {
     if (text.length <= maxLength) {
@@ -31,31 +28,12 @@ const Card: React.FC<Article> = ({
   };
 
   const getSentimentColorClass = (sentiment: string) => {
-    if (sentimentOptions.Positive.has(sentiment)) return "text-green-500";
-    if (sentimentOptions.Negative.has(sentiment)) return "text-red-500";
+    if (sentimentOptions) {
+      if (sentimentOptions.Positive.has(sentiment)) return "text-green-500";
+      if (sentimentOptions.Negative.has(sentiment)) return "text-red-500";
+    }
     return "";
   };
-
-  useEffect(() => {
-    const fetchSentiments = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/article/sentiments`
-        );
-        if (response.data && response.status === 200) {
-          setSentimentOptions({
-            Positive: new Set(response.data.Positive),
-            Negative: new Set(response.data.Negative),
-            Neutral: new Set(response.data.Neutral),
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching sentiment options:", error);
-      }
-    };
-
-    fetchSentiments();
-  }, []);
 
   return (
     <div className="flex-shrink-0 shadow-md border dark:border-white rounded-lg overflow-hidden flex p-4">
