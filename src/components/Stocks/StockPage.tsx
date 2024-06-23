@@ -1,30 +1,35 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
+import { useQuery } from "react-query";
 import axios from "axios";
 
 import TickerCard from "@/src/components/Stocks/TickerCard";
 import Loader from "@/src/components/units/Loader";
 import NextButton from "@/src/components/units/NextButton";
 import StockModal from "@/src/components/Stocks/StockModal";
-import { StockInfo } from "@/src/types/Stock";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
+
+import { StockInfo } from "@/src/types/Stock";
 import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
+import { fetchTickerList } from "@/src/queries/stockQueries";
 
 const StocksPage = () => {
   // Stock info
   const [stockInfo, setStockInfo] = useState<StockInfo[] | null>(null);
   const [filteredStockInfo, setFilteredStockInfo] = useState<StockInfo[] | null>(null);
-  const [tickerOptions, setTickerOptions] = useState<string[]>([]);
-  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const [currCompany, setCurrCompany] = useState("");
   const [currTicker, setCurrTicker] = useState("");
+
+  // Filters
+  const { data: tickerOptions } = useQuery("tickerList", fetchTickerList);
+  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
+  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
 
   // Modal and page handling
   const PAGE_SIZE = 10;
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
 
   useEffect(() => {
     const fetchStockExchange = async () => {
@@ -37,17 +42,7 @@ const StocksPage = () => {
         setStockInfo(null);
       }
     };
-
-    const fetchTickerList = async () => {
-      try {
-        const response = await axios.get("/api/stock/ticker");
-        setTickerOptions(response.data.tickers);
-      } catch (error) {
-        console.error("Error fetching tickers:", error);
-      }
-    };
     fetchStockExchange();
-    fetchTickerList();
   }, []);
 
   useEffect(() => {

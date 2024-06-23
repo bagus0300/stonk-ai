@@ -37,6 +37,7 @@
     "react-financial-charts": "^2.0.1",
     "react-icons": "^4.12.0",
     "react-modal": "^3.16.1",
+    "react-query": "^3.39.3",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4",
     "ws": "^8.17.0"

@@ -1,15 +1,18 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
+import { useQuery } from "react-query";
 import axios from "axios";
 
-import { Article } from "@/src/types/Article";
-import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
-import { getDateDaysBefore } from "@/src/utils/dateUtils";
 import Card from "@/src/components/News/Card";
 import Loader from "@/src/components/units/Loader";
 import MultiSelectDropdown from "@/src/components/Dropdown/Multiselect";
 import SingleSelectDropdown from "@/src/components/Dropdown/Singleselect";
 import NextButton from "@/src/components/units/NextButton";
+
+import { Article } from "@/src/types/Article";
+import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
+import { getDateDaysBefore } from "@/src/utils/dateUtils";
+import { fetchTickerList } from "@/src/queries/stockQueries";
 
 const NewsDisplay = () => {
   // Article and page info
@@ -19,8 +22,8 @@ const NewsDisplay = () => {
   const [loadingMore, setLoadingMore] = useState(false);
 
   // Search filters
+  const { data: tickerOptions } = useQuery("tickerList", fetchTickerList);
   const { searchQuery } = useContext(SearchContext) as SearchContextProps;
-  const [tickerOptions, setTickerOptions] = useState<string[]>([]);
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const [selectedSentiment, setSelectedSentiment] = useState<number | null>(null);
   const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(null);
@@ -65,15 +68,11 @@ const NewsDisplay = () => {
         end_date: endDate,
       });
 
-      const response = await fetch(
+      const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/article/news?${queryParams}`
       );
       setPage((prev) => prev + 1);
-
-      if (response.ok) {
-        return await response.json();
-      }
-      return [];
+      return response.data;
     } catch (error) {
       console.error("Error fetching articles: ", error);
     }
@@ -96,18 +95,6 @@ const NewsDisplay = () => {
   useEffect(() => {
     getNewlyFilteredArticles();
   }, [selectedSentiment, selectedPriceAction, searchQuery, selectedDateRange]);
-
-  useEffect(() => {
-    const fetchTickerList = async () => {
-      try {
-        const response = await axios.get("/api/stock/ticker");
-        setTickerOptions(response.data.tickers);
-      } catch (error) {
-        console.error("Error fetching tickers:", error);
-      }
-    };
-    fetchTickerList();
-  }, []);
 
   return (
     <div className="max-w-screen-lg mx-auto mt-3 mb-20">

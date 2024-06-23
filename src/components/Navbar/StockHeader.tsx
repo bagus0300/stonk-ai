@@ -1,31 +1,21 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 import axios from "axios";
 
 import { QuoteInfo } from "@/src/types/Stock";
 import { getPriceColorStr, getPriceStrArrow } from "@/src/utils/priceUtils";
+import { fetchTickerList } from "@/src/queries/stockQueries";
 
 const StockHeader = () => {
-  const [tickerList, setTickerList] = useState<string[]>([]);
   const [quoteInfo, setQuoteInfo] = useState<Record<string, QuoteInfo>>({});
-
-  useEffect(() => {
-    const fetchTickerList = async () => {
-      try {
-        const response = await axios.get("/api/stock/ticker");
-        setTickerList(response.data.tickers);
-      } catch (error) {
-        console.error("Error fetching tickers:", error);
-      }
-    };
-    fetchTickerList();
-  }, []);
+  const { data: tickerList } = useQuery("tickerList", fetchTickerList);
 
   useEffect(() => {
     const fetchQuoteInfo = async () => {
       const fetchedQuoteInfo: Record<string, QuoteInfo> = {};
       try {
         await Promise.all(
-          tickerList.map(async (ticker) => {
+          tickerList.map(async (ticker: string) => {
             try {
               const response = await axios.get(`/api/stock/quote/?ticker=${ticker}`);
               fetchedQuoteInfo[ticker] = response.data.quoteInfo;
@@ -40,14 +30,14 @@ const StockHeader = () => {
       }
     };
 
-    if (tickerList.length > 0) {
+    if (tickerList && tickerList.length > 0) {
       fetchQuoteInfo();
     }
   }, [tickerList]);
 
   return (
     <div className="flex overflow-x-scroll space-x-2 p-2">
-      {tickerList.map((ticker: string) => (
+      {tickerList && tickerList.map((ticker: string) => (
         <div key={ticker} className="flex-shrink-0 w-64 p-4">
           <div className="flex justify-between items-center">
             <div className="font-bold">{ticker}</div>
