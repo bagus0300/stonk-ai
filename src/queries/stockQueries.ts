@@ -2,8 +2,8 @@ import axios from "axios";
 
 export const fetchTickerList = async () => {
   try {
-    const response = await axios.get("/api/stock/ticker");
-    return response.data.tickers;
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/stock/tickers`);
+    return response.data;
   } catch (error) {
     console.error("Error fetching tickers:", error);
   }
