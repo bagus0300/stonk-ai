@@ -18,7 +18,13 @@ const Card: React.FC<Article> = ({
   open_price,
   close_price,
 }) => {
-  const { data: sentimentOptions } = useQuery("sentiments", fetchSentiments);
+  const { data: sentimentOptions } = useQuery("sentiments", fetchSentiments, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
 
   const truncateSummary = (text: string, maxLength: number) => {
     if (text.length <= maxLength) {

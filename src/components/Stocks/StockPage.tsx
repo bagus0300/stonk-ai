@@ -21,7 +21,13 @@ const StocksPage = () => {
   const [currTicker, setCurrTicker] = useState("");
 
   // Filters
-  const { data: tickerOptions } = useQuery("tickerList", fetchTickerList);
+  const { data: tickerOptions } = useQuery("tickerList", fetchTickerList, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const { searchQuery } = useContext(SearchContext) as SearchContextProps;
 

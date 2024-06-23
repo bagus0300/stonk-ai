@@ -15,7 +15,13 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null);
   const [fetchSuccess, setFetchSuccess] = useState(true);
 
-  const { data: tickerQuote } = useQuery(`${ticker}_quote`, () => fetchQuoteInfo(ticker));
+  const { data: tickerQuote } = useQuery(`${ticker}_quote`, () => fetchQuoteInfo(ticker), {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
 
   useEffect(() => {
     const fetchCompanyProfile = async () => {

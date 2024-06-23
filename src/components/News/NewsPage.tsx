@@ -22,7 +22,13 @@ const NewsDisplay = () => {
   const [loadingMore, setLoadingMore] = useState(false);
 
   // Search filters
-  const { data: tickerOptions } = useQuery("tickerList", fetchTickerList);
+  const { data: tickerOptions } = useQuery("tickerList", fetchTickerList, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
   const { searchQuery } = useContext(SearchContext) as SearchContextProps;
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
   const [selectedSentiment, setSelectedSentiment] = useState<number | null>(null);
