@@ -1,9 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 import axios from "axios";
 
-import { CompanyProfile, QuoteInfo } from "@/src/types/Stock";
+import { CompanyProfile } from "@/src/types/Stock";
 import { getPriceColorStr, getPriceDiffStr } from "@/src/utils/priceUtils";
+import { fetchQuoteInfo } from "@/src/queries/stockQueries";
 
 interface TickerCardProps {
   ticker: string;
@@ -11,8 +13,9 @@ interface TickerCardProps {
 
 const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null);
-  const [quoteInfo, setQuoteInfo] = useState<QuoteInfo | null>(null);
   const [fetchSuccess, setFetchSuccess] = useState(true);
+
+  const { data: tickerQuote } = useQuery(`${ticker}_quote`, () => fetchQuoteInfo(ticker));
 
   useEffect(() => {
     const fetchCompanyProfile = async () => {
@@ -28,22 +31,6 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
 
     if (ticker) {
       fetchCompanyProfile();
-    }
-  }, [ticker]);
-
-  useEffect(() => {
-    const fetchQuoteInfo = async () => {
-      try {
-        const response = await axios.get(`/api/stock/quote/?ticker=${ticker}`);
-        setQuoteInfo(response.data.quoteInfo);
-      } catch (error) {
-        console.error("Error fetching quote info:", error);
-        setQuoteInfo(null);
-      }
-    };
-
-    if (ticker) {
-      fetchQuoteInfo();
     }
   }, [ticker]);
 
@@ -65,16 +52,16 @@ const TickerCard: React.FC<TickerCardProps> = ({ ticker }) => {
               {companyProfile.ticker} - {companyProfile.name} - {companyProfile.exchange}
             </p>
           </div>
-          {quoteInfo && (
+          {tickerQuote && (
             <div className="flex flex-col items-center text-sm p-2 font-bold">
-              <p>{quoteInfo.c.toFixed(2)}</p>
+              <p>{tickerQuote.c.toFixed(2)}</p>
               <p
                 className={`inline-block  px-2 py-1 rounded text-white bg-${getPriceColorStr(
-                  quoteInfo.o,
-                  quoteInfo.c
+                  tickerQuote.o,
+                  tickerQuote.c
                 )}`}
               >
-                {getPriceDiffStr(quoteInfo.o, quoteInfo.c)}
+                {getPriceDiffStr(tickerQuote.o, tickerQuote.c)}
               </p>
             </div>
           )}

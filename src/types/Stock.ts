@@ -32,7 +32,7 @@ export interface LiveTradeData {
   v: number;
 }
 
-export interface QuoteInfo {
+export interface QuoteData {
   c: number;
   h: number;
   l: number;
