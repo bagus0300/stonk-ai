@@ -1,6 +1,6 @@
 "use client";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { Switch } from "@headlessui/react";
 
 const ThemeToggle = () => {

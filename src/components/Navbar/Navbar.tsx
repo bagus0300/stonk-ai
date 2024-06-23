@@ -3,13 +3,14 @@ import { useState, useEffect, useContext } from "react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
-import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
 import NavLink from "@/src/components/Navbar/NavLink";
 import SearchBar from "@/src/components/Navbar/SearchBar";
 import StockHeader from "@/src/components/Navbar/StockHeader";
 import ThemeToggle from "@/src/components/Navbar/ThemeToggle";
 import LightLogo from "../../app/assets/light_logo.png";
 import DarkLogo from "../../app/assets/dark_logo.png";
+
+import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvider";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

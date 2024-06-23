@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { scaleTime } from "d3-scale";
@@ -16,10 +15,11 @@ import {
   HoverTooltip,
 } from "react-financial-charts";
 
-import { getPriceDiff } from "@/src/utils/priceUtils";
-import { PriceData } from "@/src/types/Stock";
 import TooltipContent from "@/src/components/Stocks/Tooltip";
 import Loader from "@/src/components/units/Loader";
+
+import { getPriceDiff } from "@/src/utils/priceUtils";
+import { PriceData } from "@/src/types/Stock";
 
 interface LineChartProps {
   ticker: string;

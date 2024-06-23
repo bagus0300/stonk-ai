@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 
 import HeaderCard from "@/src/components/Navbar/HeaderCard";
+
 import { fetchTickerList } from "@/src/queries/stockQueries";
 
 const StockHeader = () => {

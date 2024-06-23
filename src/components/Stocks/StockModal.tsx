@@ -3,6 +3,10 @@ import Modal from "react-modal";
 import { useTheme } from "next-themes";
 import axios from "axios";
 
+import WebSocketManager from "@/src/websocket/SocketManager";
+import LineChart from "@/src/components/Stocks/LineChart";
+import DataTable from "@/src/components/Stocks/DataTable";
+
 import {
   PriceData,
   LiveTradeData,
@@ -11,9 +15,6 @@ import {
 } from "@/src/types/Stock";
 import { getPriceColorStr, getPriceDiffStr, getPercentChangeStr } from "@/src/utils/priceUtils";
 import { dateToISOString } from "@/src/utils/dateUtils";
-import WebSocketManager from "@/src/websocket/SocketManager";
-import LineChart from "@/src/components/Stocks/LineChart";
-import DataTable from "@/src/components/Stocks/DataTable";
 
 interface StockModalProps {
   company: string;
