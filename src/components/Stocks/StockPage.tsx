@@ -14,13 +14,21 @@ import { SearchContext, SearchContextProps } from "@/src/providers/SearchProvide
 import { fetchTickerList } from "@/src/queries/stockQueries";
 
 const StocksPage = () => {
-  // Stock info
+  // Page and modal info
   const [stockInfo, setStockInfo] = useState<StockInfo[] | null>(null);
   const [filteredStockInfo, setFilteredStockInfo] = useState<StockInfo[] | null>(null);
+  const PAGE_SIZE = 10;
+  const [page, setPage] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Selected filter options
+  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
+  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
   const [currCompany, setCurrCompany] = useState("");
   const [currTicker, setCurrTicker] = useState("");
 
-  // Filters
+  // Filter options
   const { data: tickerOptions } = useQuery("tickerList", fetchTickerList, {
     staleTime: Infinity,
     cacheTime: Infinity,
@@ -28,14 +36,6 @@ const StocksPage = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,
   });
-  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
-  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
-
-  // Modal and page handling
-  const PAGE_SIZE = 10;
-  const [page, setPage] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchStockExchange = async () => {

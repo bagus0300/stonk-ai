@@ -15,13 +15,20 @@ import { getDateDaysBefore } from "@/src/utils/dateUtils";
 import { fetchTickerList } from "@/src/queries/stockQueries";
 
 const NewsDisplay = () => {
-  // Article and page info
+  // Page and loading info
   const [articles, setArticles] = useState<Article[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Search filters
+  // Selected filter options
+  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
+  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
+  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(null);
+  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(null);
+  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(null);
+
+  // Filter options
   const { data: tickerOptions } = useQuery("tickerList", fetchTickerList, {
     staleTime: Infinity,
     cacheTime: Infinity,
@@ -29,13 +36,6 @@ const NewsDisplay = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,
   });
-  const { searchQuery } = useContext(SearchContext) as SearchContextProps;
-  const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
-  const [selectedSentiment, setSelectedSentiment] = useState<number | null>(null);
-  const [selectedPriceAction, setSelectedPriceAction] = useState<number | null>(null);
-  const [selectedDateRange, setSelectedDateRange] = useState<number | null>(null);
-
-  // Dropdown options
   const sentimentOptions = new Map<number, string>([
     [0, "Positive"],
     [1, "Negative"],
