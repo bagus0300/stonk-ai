@@ -9,7 +9,10 @@ const StockHeader = () => {
 
   return (
     <div className="flex overflow-x-scroll space-x-2 p-2">
-      {tickerList && tickerList.map((ticker: string) => <HeaderCard ticker={ticker} />)}
+      {tickerList &&
+        tickerList.map((ticker: string, index: number) => (
+          <HeaderCard key={index} ticker={ticker} />
+        ))}
     </div>
   );
 };
