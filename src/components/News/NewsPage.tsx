@@ -86,6 +86,7 @@ const NewsDisplay = () => {
 
   const getNewlyFilteredArticles = async () => {
     setLoading(true);
+    setPage(0)
     const data = await loadArticles(0);
     setArticles(data.articles);
     setLoading(false);
