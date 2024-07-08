@@ -77,8 +77,7 @@ const NewsDisplay = () => {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/article/news?${queryParams}`
       );
-      setPage((prev) => prev + 1);
-      return response.data;
+      return response.data["data"];
     } catch (error) {
       console.error("Error fetching articles: ", error);
     }
@@ -87,15 +86,16 @@ const NewsDisplay = () => {
   const getNewlyFilteredArticles = async () => {
     setLoading(true);
     setPage(0)
-    const data = await loadArticles(0);
-    setArticles(data.articles);
+    const articles = await loadArticles(0);
+    setArticles(articles);
     setLoading(false);
   };
 
   const loadNextPageArticles = async () => {
     setLoadingMore(true);
-    const data = await loadArticles(page + 1);
-    setArticles((prevArticles) => [...prevArticles, ...data.articles]);
+    const articles = await loadArticles(page + 1);
+    setArticles((prevArticles) => [...prevArticles, ...articles]);
+    setPage((prev) => prev + 1);
     setLoadingMore(false);
   };
 
