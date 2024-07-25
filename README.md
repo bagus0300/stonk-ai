@@ -16,8 +16,8 @@ An AI-powered stock market analysis and prediction engine that uses OpenAI's GPT
 - [x] Options data
 - [x] Custom Themes
 [![Stonk AI Logo](/assets/4.png)](https://stonkai.xyz)
-(/assets/5.png)
-(/assets/2.png)
+[![Stonk AI Logo](/assets/5.png)](https://stonkai.xyz)
+[![Stonk AI Logo](/assets/2.png)](https://stonkai.xyz)
 
 ## Installation:
 
