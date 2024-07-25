@@ -1,5 +1,3 @@
-# ( UNDER CONSTRUCTION...)
-
 # stonk-ai
 
 ## Description
@@ -17,11 +15,6 @@ An AI-powered stock market analysis and prediction engine that uses OpenAI's GPT
 - [x] Get the latest YouTube videos about a stock
 - [x] Options data
 - [x] Custom Themes
-- [ ] User Authentication - Coming soon...
-- [ ] User Posts - Coming soon...
-- [ ] User Sentiment - Coming soon...
-- [ ] Market fear and greed - Coming soon...
-
 [![Stonk AI Logo](/assets/stonkai-sentiment.png)](https://stonkai.xyz)
 
 ## Installation:
