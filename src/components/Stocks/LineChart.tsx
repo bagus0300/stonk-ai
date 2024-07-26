@@ -87,10 +87,12 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
         data={priceData}
         xScale={scaleTime()}
         xAccessor={xAccessor}
-        xExtents={[xAccessor(priceData[0]), xAccessor(priceData[priceData.length - 1])]}
+        xExtents={[
+          xAccessor(priceData[0]),
+          xAccessor(priceData[priceData.length - 1]),
+        ]}
         disableZoom={true}
-        disablePan={false}
-      >
+        disablePan={false}>
         <Chart id={1} yExtents={(d: PriceData) => [d.close]}>
           <XAxis
             axisAt="bottom"
@@ -117,8 +119,16 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
             strokeStyle={priceLineColor}
             fillStyle={priceFillColor}
           />
-          <MouseCoordinateX at="bottom" orient="bottom" displayFormat={timeFormat("%Y-%m-%d")} />
-          <MouseCoordinateY at="right" orient="right" displayFormat={format(".2f")} />
+          <MouseCoordinateX
+            at="bottom"
+            orient="bottom"
+            displayFormat={timeFormat("%Y-%m-%d")}
+          />
+          <MouseCoordinateY
+            at="right"
+            orient="right"
+            displayFormat={format(".2f")}
+          />
           <HoverTooltip
             yAccessor={(d) => d.close}
             tooltip={TooltipContent}
@@ -133,3 +143,5 @@ const LineChart: React.FC<LineChartProps> = ({ ticker, priceData }) => {
 };
 
 export default LineChart;
+
+//this is LineChart component
