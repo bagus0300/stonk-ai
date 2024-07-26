@@ -60,3 +60,5 @@ const TooltipContent = {
 };
 
 export default TooltipContent;
+
+//this is TooltipContent component
